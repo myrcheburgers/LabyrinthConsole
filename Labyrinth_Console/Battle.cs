@@ -8,8 +8,10 @@ namespace Labyrinth_Console
 {
     class Battle
     {
+        //TODO: convert character type to creature type for battles -- will simplifiy yet-to-be-implemented targeting systems
         public void Start(Character player, ICreature mob)
         {
+            #region Initiative calculation
             RNG rng = new RNG();
             //int[] initiative = new int[2];
             int[] initiative = { 0, 0 };
@@ -34,7 +36,7 @@ namespace Labyrinth_Console
             }
             Console.Write(Environment.NewLine);
             Console.WriteLine("Player initiative: {0}\n{1} initiative: {2}", initiative[0], mob.name, initiative[1]);
-
+            #endregion
         }
     }
 }

@@ -151,10 +151,9 @@ namespace Labyrinth_Console
 
         public static explicit operator Creature(Goblin2 obj)
         {
-            Creature output = new Creature(obj.name, 0, obj.level, obj.hpmax, obj.mpmax, obj.atk, obj.def, obj.speed); //{ name = obj.name, id = 0, level = obj.level, hpmax = obj.hpmax, mpmax = obj.mpmax, atk = obj.atk, def = obj.def, speed = obj.speed };
+            Creature output = new Creature(obj.name, 0, obj.level, obj.hpmax, obj.mpmax, obj.atk, obj.def, obj.speed);
+            //ID = 0 is a placeholder
             return output;
         }
     }
 }
-
-

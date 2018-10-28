@@ -46,6 +46,7 @@
     <Compile Include="Bestiary.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="Character.cs" />
+    <Compile Include="Party.cs" />
     <Compile Include="PlayerClass.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -20,6 +20,7 @@ namespace Labyrinth_Console
          **/
 
         public string name;
+        //public string id;
 
         public string job;
 
@@ -61,6 +62,14 @@ namespace Labyrinth_Console
         //equipment
         public Weapon mainhand;
 
+        void EquipWeapon(Weapon weapon)
+        {
+            //name, dmg, acc, numAttacks
+            mainhand.name = weapon.name;
+            mainhand.dmg = weapon.dmg;
+            mainhand.acc = weapon.acc;
+            mainhand.numAttacks = weapon.numAttacks;
+        }
         void LevelUp()
         {
             //when implemented, iterate once for each level gained

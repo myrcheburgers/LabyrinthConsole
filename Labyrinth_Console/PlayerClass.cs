@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Labyrinth_Console
 {
+    public static class ClassNames
+    {
+        public static string[] names = { "Warrior", "Berserker" };
+    }
+
     class PlayerClass
     {
         /**
@@ -20,7 +25,7 @@ namespace Labyrinth_Console
          * 
          **/
 
-        class Warrior
+        public class Warrior
         {
             public string name;
             public string job = "Warrior";
@@ -41,7 +46,35 @@ namespace Labyrinth_Console
             //explicit type conversion
             public static explicit operator Character(Warrior obj)
             {
-                Character output = new Character() {name = obj.name, hpmax = obj.hpmax, mpmax = obj.mpmax, atk = obj.atk, def = obj.def, speed = obj.speed, hpGrowth = obj.hpGrowth, mpGrowth = obj.mpGrowth, atkGrowth = obj.atkGrowth, defGrowth = obj.defGrowth };
+                Character output = new Character() {name = obj.name, hpmax = obj.hpmax, mpmax = obj.mpmax, atk = obj.atk, def = obj.def, speed = obj.speed, hpGrowth = obj.hpGrowth, mpGrowth = obj.mpGrowth, atkGrowth = obj.atkGrowth, defGrowth = obj.defGrowth, job = obj.job };
+                //ID = 0 is a placeholder
+                //alt implementation in Bestiary.Goblin2
+                return output;
+            }
+        }
+
+        public class Berserker
+        {
+            public string name;
+            public string job = "Berserker";
+
+            public int hpmax = 190;
+            public int mpmax = 10;
+
+            public int atk = 35;
+            public int def = 15;
+            public int speed = 30;
+
+            //levelups
+            public int hpGrowth = 35;
+            public int mpGrowth = 5;
+            public int atkGrowth = 40;
+            public int defGrowth = 20;
+
+            //explicit type conversion
+            public static explicit operator Character(Berserker obj)
+            {
+                Character output = new Character() { name = obj.name, hpmax = obj.hpmax, mpmax = obj.mpmax, atk = obj.atk, def = obj.def, speed = obj.speed, hpGrowth = obj.hpGrowth, mpGrowth = obj.mpGrowth, atkGrowth = obj.atkGrowth, defGrowth = obj.defGrowth, job = obj.job };
                 //ID = 0 is a placeholder
                 //alt implementation in Bestiary.Goblin2
                 return output;

@@ -8,7 +8,7 @@ namespace Labyrinth_Console
 {
     public static class ClassNames
     {
-        public static string[] names = { "Warrior", "Berserker" };
+        public static string[] names = { "Warrior", "Berserker", "Mage" };
     }
 
     class PlayerClass
@@ -73,6 +73,34 @@ namespace Labyrinth_Console
 
             //explicit type conversion
             public static explicit operator Character(Berserker obj)
+            {
+                Character output = new Character() { name = obj.name, hpmax = obj.hpmax, mpmax = obj.mpmax, atk = obj.atk, def = obj.def, speed = obj.speed, hpGrowth = obj.hpGrowth, mpGrowth = obj.mpGrowth, atkGrowth = obj.atkGrowth, defGrowth = obj.defGrowth, job = obj.job };
+                //ID = 0 is a placeholder
+                //alt implementation in Bestiary.Goblin2
+                return output;
+            }
+        }
+
+        public class Mage
+        {
+            public string name;
+            public string job = "Mage";
+
+            public int hpmax = 120;
+            public int mpmax = 80;
+
+            public int atk = 15;
+            public int def = 15;
+            public int speed = 30;
+
+            //levelups
+            public int hpGrowth = 10;
+            public int mpGrowth = 50;
+            public int atkGrowth = 20;
+            public int defGrowth = 20;
+
+            //explicit type conversion
+            public static explicit operator Character(Mage obj)
             {
                 Character output = new Character() { name = obj.name, hpmax = obj.hpmax, mpmax = obj.mpmax, atk = obj.atk, def = obj.def, speed = obj.speed, hpGrowth = obj.hpGrowth, mpGrowth = obj.mpGrowth, atkGrowth = obj.atkGrowth, defGrowth = obj.defGrowth, job = obj.job };
                 //ID = 0 is a placeholder

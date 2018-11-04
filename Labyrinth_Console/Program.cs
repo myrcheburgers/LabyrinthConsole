@@ -36,12 +36,25 @@ namespace Labyrinth_Console
                 cmd = Console.ReadLine().ToLower();
                 switch (cmd)
                 {
+                    case "_rtest":
+                        {
+                            isValid = true;
+                            rTest();
+                            break;
+                        }
                     case "createparty":
                     case "makeparty":
                     case "party":
                         {
                             isValid = true;
                             BuildParty();
+                            break;
+                        }
+                    case "mtest":
+                    case "magictest":
+                        {
+                            isValid = true;
+                            MagicTest();
                             break;
                         }
                     case "stats":
@@ -188,6 +201,13 @@ namespace Labyrinth_Console
                             isValid = true;
                             break;
                         }
+                    case "mage":
+                        {
+                            PlayerClass.Mage tempChar = new PlayerClass.Mage();
+                            newCharacter = (Character)tempChar;
+                            isValid = true;
+                            break;
+                        }
                     default:
                         {
                             Console.WriteLine("Invalid command.");
@@ -203,6 +223,45 @@ namespace Labyrinth_Console
         }
 
         #endregion
+
+        static void MagicTest()
+        {
+            //Build mage, build enemy, implement Magic
+
+            //mage builder
+            Character newCharacter = new Character();
+            PlayerClass.Mage tempChar = new PlayerClass.Mage();
+            newCharacter = (Character)tempChar;
+            newCharacter.name = "Mage";
+            newCharacter.hp = newCharacter.hpmax;
+            newCharacter.mp = newCharacter.mpmax;
+            Party.AddMember(newCharacter);
+
+            //enemy builder
+            Goblin2 preGoblin = new Goblin2();
+            preGoblin.AdjustStats();
+            Creature goblin = (Creature)preGoblin;
+            goblin.id = 99;
+
+            //Pre-cast
+            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.hp, goblin.hpmax, goblin.mp, goblin.mpmax);
+            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
+
+            //cast
+            //Magic.Elemental firecast = MagicList.elemental["fire"];
+            Console.WriteLine("{0} casts {1}.", newCharacter.name, MagicList.elemental["fire"].name);
+
+            Creature[] creaArr;
+
+            creaArr = MagicList.elemental["fire"].Cast((Creature)newCharacter, goblin);
+
+            newCharacter.mp = creaArr[0].mp;
+            goblin = creaArr[1];
+
+            //post-cast
+            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.hp, goblin.hpmax, goblin.mp, goblin.mpmax);
+            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
+        }
 
         static void StatTests()
         {
@@ -243,6 +302,21 @@ namespace Labyrinth_Console
             Battle testBattle = new Battle();
 
             testBattle.Start(hero, goblin);
+        }
+
+        static void rTest()
+        {
+            int testint = 10;
+            int[] testarr = { 10, 10 };
+            rTestFunction(testint);
+
+            Console.WriteLine(testint);
+            int derp = rTestFunction(testint);
+            Console.WriteLine(derp);
+        }
+        static int rTestFunction(int i)
+        {
+            return i + 2;
         }
     }
 }

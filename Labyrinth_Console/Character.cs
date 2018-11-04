@@ -80,9 +80,13 @@ namespace Labyrinth_Console
             def += Convert.ToInt32(Math.Floor(Convert.ToSingle(defGrowth) * 0.1));
         }
 
-        //void Destroy()
-        //{
-        //    this.Dispose(true);
-        //}
+        
+        //For battlers:
+        public static explicit operator Creature(Character obj)
+        {
+            Creature output = new Creature(obj.name, 0, obj.level, obj.hpmax, obj.mpmax, obj.atk, obj.def, obj.speed);
+            //ID = 0 is a placeholder
+            return output;
+        }
     }
 }

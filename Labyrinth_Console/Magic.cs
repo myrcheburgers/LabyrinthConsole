@@ -17,6 +17,12 @@ namespace Labyrinth_Console
             {"fire2", new Magic.Elemental("Fire II", "fire", 12, 20)}
         };
 
+        public static readonly Dictionary<string, Magic.Healing> healing = new Dictionary<string, Magic.Healing>()
+        {
+            {"cure", new Magic.Healing("Cure", 5, 15)},
+            {"cure2", new Magic.Healing("Cure II", 8, 30) }
+        };
+
         //public static readonly Dictionary<string, Magic> test = new Dictionary<string, Magic>()
         //{
         //    {"test", new Magic.Elemental("TestMagic", "fire", 5, 10) }
@@ -69,9 +75,32 @@ namespace Labyrinth_Console
 
         public class Healing : Magic
         {
+            public string name;
+            public int mpcost;
+            public int baseRecovery;
+            public float modifier;
+
             public override Creature[] Cast(Creature caster, Creature target)
             {
-                return null;
+                Creature[] creatureArr = new Creature[2];
+
+                modifier = (float)caster.mpmax / 10;
+
+                caster.mp -= mpcost;
+                target.hp += (int)Math.Floor((float)baseRecovery * modifier);
+
+                creatureArr[0] = caster;
+                creatureArr[1] = target;
+
+                return creatureArr;
+            }
+
+            //constructor
+            public Healing(string _name, int _mpcost, int _baseRecovery)
+            {
+                name = _name;
+                mpcost = _mpcost;
+                baseRecovery = _baseRecovery;
             }
         }
 

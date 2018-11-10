@@ -8,8 +8,24 @@ namespace Labyrinth_Console
 {
     class Battle
     {
+        List<Creature> combatants = new List<Creature>();
+        List<Creature> partyList = new List<Creature>();
+        List<Creature> mobList = new List<Creature>();
+
+        public void Start(Character[] party, Creature[] mobs)
+        {
+            foreach (Character member in party)
+            {
+                partyList.Add((Creature)member);
+            }
+            foreach (Creature mob in mobs)
+            {
+                mobList.Add(mob);
+            }
+        }
+
         //TODO: convert character type to creature type for battles -- will simplifiy yet-to-be-implemented targeting systems
-        public void Start(Character player, ICreature mob)
+        public void RollInitiative(Character player, ICreature mob)
         {
             #region Initiative calculation
             RNG rng = new RNG();
@@ -37,6 +53,11 @@ namespace Labyrinth_Console
             Console.Write(Environment.NewLine);
             Console.WriteLine("Player initiative: {0}\n{1} initiative: {2}", initiative[0], mob.name, initiative[1]);
             #endregion
+        }
+
+        public Creature CreateBattler(Character partyMember)
+        {
+            return (Creature)partyMember;
         }
     }
 }

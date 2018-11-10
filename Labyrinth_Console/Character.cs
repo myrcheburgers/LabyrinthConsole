@@ -62,6 +62,9 @@ namespace Labyrinth_Console
         //equipment
         public Weapon mainhand;
 
+        //magic
+        public MagicLearned magic = new MagicLearned();
+
         void EquipWeapon(Weapon weapon)
         {
             //name, dmg, acc, numAttacks
@@ -84,7 +87,7 @@ namespace Labyrinth_Console
         //For battlers:
         public static explicit operator Creature(Character obj)
         {
-            Creature output = new Creature(obj.name, 0, obj.level, obj.hpmax, obj.mpmax, obj.atk, obj.def, obj.speed);
+            Creature output = new Creature(obj.name, 0, obj.level, obj.hpmax, obj.mpmax, obj.atk, obj.def, obj.speed, obj.magic);
             //ID = 0 is a placeholder
             return output;
         }

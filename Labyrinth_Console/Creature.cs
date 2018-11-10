@@ -86,9 +86,10 @@ namespace Labyrinth_Console
         private int _atk;
         private int _def;
         private int _speed;
+        private MagicLearned _magic;
 
         //constructor
-        public Creature(string name, int id, int level, int hpmax, int mpmax, int atk, int def, int speed)
+        public Creature(string name, int id, int level, int hpmax, int mpmax, int atk, int def, int speed, MagicLearned magic)
         {
             _name = name;
             _id = id;
@@ -100,6 +101,7 @@ namespace Labyrinth_Console
             _atk = atk;
             _def = def;
             _speed = speed;
+            _magic = magic;
         }
 
         //Property implimentation

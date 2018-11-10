@@ -9,6 +9,13 @@ namespace Labyrinth_Console
     public static class ClassNames
     {
         public static string[] names = { "Warrior", "Berserker", "Mage" };
+
+        public static readonly Dictionary<string, string> abbreviate = new Dictionary<string, string>()
+        {
+            {"Warrior", "WAR" },
+            {"Berserker", "BER" },
+            {"Mage", "MAG" }
+        };
     }
 
     class PlayerClass
@@ -37,6 +44,8 @@ namespace Labyrinth_Console
             public int def = 25;
             public int speed = 30;
 
+            public MagicLearned magic = new MagicLearned();
+
             //levelups
             public int hpGrowth = 30;
             public int mpGrowth = 10;
@@ -46,7 +55,23 @@ namespace Labyrinth_Console
             //explicit type conversion
             public static explicit operator Character(Warrior obj)
             {
-                Character output = new Character() {name = obj.name, hpmax = obj.hpmax, mpmax = obj.mpmax, atk = obj.atk, def = obj.def, speed = obj.speed, hpGrowth = obj.hpGrowth, mpGrowth = obj.mpGrowth, atkGrowth = obj.atkGrowth, defGrowth = obj.defGrowth, job = obj.job };
+                Character output = new Character()
+                {
+                    name = obj.name,
+                    hpmax = obj.hpmax,
+                    mpmax = obj.mpmax,
+                    atk = obj.atk,
+                    def = obj.def,
+                    speed = obj.speed,
+
+                    magic = obj.magic,
+
+                    hpGrowth = obj.hpGrowth,
+                    mpGrowth = obj.mpGrowth,
+                    atkGrowth = obj.atkGrowth,
+                    defGrowth = obj.defGrowth,
+                    job = obj.job
+                };
                 //ID = 0 is a placeholder
                 //alt implementation in Bestiary.Goblin2
                 return output;
@@ -65,6 +90,8 @@ namespace Labyrinth_Console
             public int def = 15;
             public int speed = 30;
 
+            public MagicLearned magic = new MagicLearned();
+
             //levelups
             public int hpGrowth = 35;
             public int mpGrowth = 5;
@@ -74,7 +101,23 @@ namespace Labyrinth_Console
             //explicit type conversion
             public static explicit operator Character(Berserker obj)
             {
-                Character output = new Character() { name = obj.name, hpmax = obj.hpmax, mpmax = obj.mpmax, atk = obj.atk, def = obj.def, speed = obj.speed, hpGrowth = obj.hpGrowth, mpGrowth = obj.mpGrowth, atkGrowth = obj.atkGrowth, defGrowth = obj.defGrowth, job = obj.job };
+                Character output = new Character()
+                {
+                    name = obj.name,
+                    hpmax = obj.hpmax,
+                    mpmax = obj.mpmax,
+                    atk = obj.atk,
+                    def = obj.def,
+                    speed = obj.speed,
+
+                    magic = obj.magic,
+
+                    hpGrowth = obj.hpGrowth,
+                    mpGrowth = obj.mpGrowth,
+                    atkGrowth = obj.atkGrowth,
+                    defGrowth = obj.defGrowth,
+                    job = obj.job
+                };
                 //ID = 0 is a placeholder
                 //alt implementation in Bestiary.Goblin2
                 return output;
@@ -93,6 +136,8 @@ namespace Labyrinth_Console
             public int def = 15;
             public int speed = 30;
 
+            public MagicLearned magic = new MagicLearned();
+
             //levelups
             public int hpGrowth = 10;
             public int mpGrowth = 50;
@@ -102,7 +147,22 @@ namespace Labyrinth_Console
             //explicit type conversion
             public static explicit operator Character(Mage obj)
             {
-                Character output = new Character() { name = obj.name, hpmax = obj.hpmax, mpmax = obj.mpmax, atk = obj.atk, def = obj.def, speed = obj.speed, hpGrowth = obj.hpGrowth, mpGrowth = obj.mpGrowth, atkGrowth = obj.atkGrowth, defGrowth = obj.defGrowth, job = obj.job };
+                Character output = new Character() {
+                    name = obj.name,
+                    hpmax = obj.hpmax,
+                    mpmax = obj.mpmax,
+                    atk = obj.atk,
+                    def = obj.def,
+                    speed = obj.speed,
+
+                    magic = obj.magic,
+
+                    hpGrowth = obj.hpGrowth,
+                    mpGrowth = obj.mpGrowth,
+                    atkGrowth = obj.atkGrowth,
+                    defGrowth = obj.defGrowth,
+                    job = obj.job
+                };
                 //ID = 0 is a placeholder
                 //alt implementation in Bestiary.Goblin2
                 return output;

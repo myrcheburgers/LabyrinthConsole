@@ -136,7 +136,9 @@ namespace Labyrinth_Console
         public int def;
         public int speed;
 
-        int multiplier = 15;
+        public MagicLearned magic = new MagicLearned();
+
+        private int multiplier = 15;
 
         public void AdjustStats()
         {
@@ -151,7 +153,7 @@ namespace Labyrinth_Console
 
         public static explicit operator Creature(Goblin2 obj)
         {
-            Creature output = new Creature(obj.name, 0, obj.level, obj.hpmax, obj.mpmax, obj.atk, obj.def, obj.speed);
+            Creature output = new Creature(obj.name, 0, obj.level, obj.hpmax, obj.mpmax, obj.atk, obj.def, obj.speed, obj.magic);
             //ID = 0 is a placeholder
             return output;
         }

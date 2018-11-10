@@ -235,6 +235,10 @@ namespace Labyrinth_Console
             newCharacter.name = "Mage";
             newCharacter.hp = newCharacter.hpmax;
             newCharacter.mp = newCharacter.mpmax;
+
+            //newCharacter.magic.elemental.Add(MagicList.elemental["fire"].name, MagicList.elemental["fire"]);
+            newCharacter.magic.elemental.Add("fire", MagicList.elemental["fire"]);
+
             Party.AddMember(newCharacter);
 
             //enemy builder
@@ -248,12 +252,13 @@ namespace Labyrinth_Console
             Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
 
             //cast
-            //Magic.Elemental firecast = MagicList.elemental["fire"];
-            Console.WriteLine("{0} casts {1}.", newCharacter.name, MagicList.elemental["fire"].name);
+            //Console.WriteLine("{0} casts {1}.", newCharacter.name, MagicList.elemental["fire"].name);
+            Console.WriteLine("{0} casts {1}.", newCharacter.name, newCharacter.magic.elemental["fire"].name);
 
             Creature[] creaArr;
 
-            creaArr = MagicList.elemental["fire"].Cast((Creature)newCharacter, goblin);
+            //creaArr = MagicList.elemental["fire"].Cast((Creature)newCharacter, goblin);
+            creaArr = newCharacter.magic.elemental["fire"].Cast((Creature)newCharacter, goblin);
 
             newCharacter.mp = creaArr[0].mp;
             goblin = creaArr[1];
@@ -261,6 +266,26 @@ namespace Labyrinth_Console
             //post-cast
             Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.hp, goblin.hpmax, goblin.mp, goblin.mpmax);
             Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
+
+            //that... actually works?
+
+            #region nope
+            ////post-cast
+            //Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.hp, goblin.hpmax, goblin.mp, goblin.mpmax);
+            //Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
+
+            ////with testdict:
+            //Console.WriteLine("{0} casts {1}.", newCharacter.name, MagicList.test["test"].name);
+
+            //creaArr = MagicList.test["test"].Cast((Creature)newCharacter, goblin);
+
+            //newCharacter.mp = creaArr[0].mp;
+            //goblin = creaArr[1];
+
+            ////post-cast
+            //Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.hp, goblin.hpmax, goblin.mp, goblin.mpmax);
+            //Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
+            #endregion
         }
 
         static void StatTests()
@@ -301,7 +326,7 @@ namespace Labyrinth_Console
 
             Battle testBattle = new Battle();
 
-            testBattle.Start(hero, goblin);
+            testBattle.RollInitiative(hero, goblin);
         }
 
         static void rTest()

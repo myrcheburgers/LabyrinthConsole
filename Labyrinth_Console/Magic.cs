@@ -16,6 +16,11 @@ namespace Labyrinth_Console
             {"fire", new Magic.Elemental("Fire", "fire", 5, 10)},
             {"fire2", new Magic.Elemental("Fire II", "fire", 12, 20)}
         };
+
+        //public static readonly Dictionary<string, Magic> test = new Dictionary<string, Magic>()
+        //{
+        //    {"test", new Magic.Elemental("TestMagic", "fire", 5, 10) }
+        //};
     }
 
     public abstract class Magic
@@ -26,7 +31,7 @@ namespace Labyrinth_Console
             return null;
         }
 
-        
+        //public string name;
 
         public class Elemental : Magic
         {

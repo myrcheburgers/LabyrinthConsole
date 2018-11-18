@@ -16,8 +16,9 @@ namespace Labyrinth_Console
             //bool exit = false;
             while (!exit)
             {
-                Console.WriteLine("Hello World!");
-                Console.ReadKey();
+                Console.WriteLine("Pointless text");
+                //Console.ReadKey();
+                Console.Write(Environment.NewLine);
 
                 Start();
             }
@@ -27,19 +28,29 @@ namespace Labyrinth_Console
         static void Start()
         {
             //Console.WriteLine("Input command.");
-            string cmd;
+            //string input;
+            string[] cmd;
+
             bool isValid = false;
             
             while (!isValid)
             {
                 Console.WriteLine("Input command.");
-                cmd = Console.ReadLine().ToLower();
-                switch (cmd)
+                
+                cmd = Console.ReadLine().ToLower().Split(' ');
+                switch (cmd[0])
                 {
                     case "_rtest":
                         {
                             isValid = true;
                             rTest();
+                            break;
+                        }
+                    case "_battletest":
+                    case "btest":
+                        {
+                            isValid = true;
+                            BattleTest();
                             break;
                         }
                     case "createparty":
@@ -48,6 +59,21 @@ namespace Labyrinth_Console
                         {
                             isValid = true;
                             BuildParty();
+                            break;
+                        }
+                    case "partysize":
+                    case "psize":
+                        {
+                            isValid = true;
+                            int partyCount = Party.memberList.Count;
+                            Console.WriteLine("Party size: {0}", partyCount);
+                            if (partyCount > 0)
+                            {
+                                foreach (KeyValuePair<string, Character> member in Party.memberList)
+                                {
+                                    Party.PrintStats(member.Value);
+                                }
+                            }
                             break;
                         }
                     case "mtest":
@@ -62,6 +88,21 @@ namespace Labyrinth_Console
                         {
                             isValid = true;
                             StatTests();
+                            break;
+                        }
+                    case "stringint":
+                    case "si":
+                        {
+                            isValid = true;
+                            int i = 0;
+                            //i = (int)Convert.ToChar(cmd[1]) % 32;
+
+                            char[] cArr = cmd[1].ToCharArray();
+                            foreach (char c in cArr)
+                            {
+                                i += (int)c % 32;
+                            }
+                            Console.WriteLine("Int value: {0}", i);
                             break;
                         }
                     case "exit":
@@ -224,6 +265,35 @@ namespace Labyrinth_Console
 
         #endregion
 
+        static void BattleTest()
+        {
+            if (Party.memberList.Count == 0)
+            {
+                Console.WriteLine("Make a party first (command \"party\")");
+            }
+            else
+            {
+                //enemy builder
+                Goblin2 preGoblin = new Goblin2();
+                preGoblin.AdjustStats();
+                Creature goblin = (Creature)preGoblin;
+                goblin.id = "goblin1";
+
+                preGoblin.AdjustStats();
+                Creature goblin2 = (Creature)preGoblin;
+                goblin.id = "goblin2";
+
+                Creature[] mobArray = { goblin, goblin2 };
+
+                //char array setup because I can't be arsed to change code in several other areas
+                Character[] charArray = new Character[Party.memberList.Count];
+                Party.memberList.Values.CopyTo(charArray, 0);
+
+                Battle battle = new Battle();
+                battle.Start(charArray, mobArray);
+            }
+        }
+
         static void MagicTest()
         {
             //Build mage, build enemy, implement Magic
@@ -245,7 +315,7 @@ namespace Labyrinth_Console
             Goblin2 preGoblin = new Goblin2();
             preGoblin.AdjustStats();
             Creature goblin = (Creature)preGoblin;
-            goblin.id = 99;
+            goblin.id = "placeholderID";
 
             //Pre-cast
             Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.hp, goblin.hpmax, goblin.mp, goblin.mpmax);
@@ -321,7 +391,7 @@ namespace Labyrinth_Console
             Goblin2 preGoblin = new Goblin2();
             preGoblin.AdjustStats();
             Creature goblin = (Creature)preGoblin;
-            goblin.id = 99;
+            goblin.id = "placeholderID";
             Console.WriteLine("Name: {0} Level: {1} ID: {2} Max HP: {3} Current HP: {4} Max MP: {5} Current MP: {6} ATK: {7} DEF: {8} SPD: {9}", goblin.name, goblin.level, goblin.id, goblin.hpmax, goblin.hp, goblin.mpmax, goblin.mp, goblin.atk, goblin.def, goblin.speed);
 
             Battle testBattle = new Battle();
@@ -339,6 +409,7 @@ namespace Labyrinth_Console
             int derp = rTestFunction(testint);
             Console.WriteLine(derp);
         }
+
         static int rTestFunction(int i)
         {
             return i + 2;

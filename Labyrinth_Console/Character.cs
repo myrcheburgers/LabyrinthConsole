@@ -20,7 +20,7 @@ namespace Labyrinth_Console
          **/
 
         public string name;
-        //public string id;
+        public string id;
 
         public string job;
 
@@ -87,7 +87,7 @@ namespace Labyrinth_Console
         //For battlers:
         public static explicit operator Creature(Character obj)
         {
-            Creature output = new Creature(obj.name, 0, obj.level, obj.hpmax, obj.mpmax, obj.atk, obj.def, obj.speed, obj.magic);
+            Creature output = new Creature(obj.name, obj.id, obj.level, obj.hpmax, obj.mpmax, obj.atk, obj.def, obj.speed, true, obj.magic);
             //ID = 0 is a placeholder
             return output;
         }

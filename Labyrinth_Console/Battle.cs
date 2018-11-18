@@ -8,23 +8,101 @@ namespace Labyrinth_Console
 {
     class Battle
     {
+        //Note: isPlayer field (bool) has been added to Creature class
+
+        RNG rng = new RNG();
+        static Random rng2 = new Random();
+
+        int seed; //range: [100000000, 999999999]
+
         List<Creature> combatants = new List<Creature>();
         List<Creature> partyList = new List<Creature>();
         List<Creature> mobList = new List<Creature>();
 
         public void Start(Character[] party, Creature[] mobs)
         {
+            seed = rng.seed();
             foreach (Character member in party)
             {
                 partyList.Add((Creature)member);
+                combatants.Add((Creature)member);
             }
             foreach (Creature mob in mobs)
             {
                 mobList.Add(mob);
+                combatants.Add(mob);
             }
+
+            combatants = SetTurnOrder(combatants);
+
+            Console.WriteLine("Turn order:");
+            foreach (Creature entity in combatants)
+            {
+                Console.WriteLine("    {0} (Speed: {1}, isPlayer = {2})", entity.name, entity.speed, entity.isPlayer);
+            }
+
         }
 
-        //TODO: convert character type to creature type for battles -- will simplifiy yet-to-be-implemented targeting systems
+        public List<Creature> SetTurnOrder(List<Creature> combatants)
+        {
+            //int startPos = 0;
+            //
+            //foreach (Creature entity in combatants)
+            //{
+            //    entity.speed = AdjustSpeed(entity, seed, startPos);
+            //    startPos++;
+            //}
+
+            //combatants.Sort((x, y) => y.speed.CompareTo(x.speed)); //descending order
+
+            int n = combatants.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rng2.Next(n + 1);
+                Creature value = combatants[k];
+                combatants[k] = combatants[n];
+                combatants[n] = value;
+            }
+            return combatants;
+        }
+
+        public int AdjustSpeed(Creature entity, int seed, int seedStartPos)
+        {
+            //Set speed to +/- whatever percent
+            int percentRange = 15;
+            float multiplier = (float)percentRange / 100;
+            int adjustment = 0;
+            int negativeMultiplier;
+
+            int[] seedArr = seed.ToString().ToCharArray().Select(x => (int)Char.GetNumericValue(x)).ToArray();
+            int arrLength = seedArr.Length;
+
+            int intID = rng.StringToInt(entity.name);
+            int index = (intID + seedStartPos) % arrLength; //seedArr[i] = 0 to 9
+            int iterations = 3; //number of ints to add
+
+            if (seedArr[(index + 4) % arrLength] < 5)
+            {
+                negativeMultiplier = 1;
+            }
+            else
+            {
+                negativeMultiplier = -1;
+            }
+
+            for (int i = 0; i < iterations; i++)
+            {
+                adjustment += seedArr[(index + i) % arrLength];
+                //Note: possible range = [0, 9*iterations]
+            }
+
+            //newSpeed = speed +/- speed*[0, %range]
+            int newSpeed = entity.speed + negativeMultiplier * entity.speed * (adjustment / (9 * iterations) * percentRange);
+
+            return newSpeed;
+        }
+        
         public void RollInitiative(Character player, ICreature mob)
         {
             #region Initiative calculation

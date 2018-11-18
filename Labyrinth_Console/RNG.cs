@@ -19,5 +19,16 @@ namespace Labyrinth_Console
         {
             return rndInt(100000000, 999999999);
         }
+
+        public int StringToInt(string str)
+        {
+            int i = 0;
+            char[] cArr = str.ToCharArray();
+            foreach (char c in cArr)
+            {
+                i += (int)c % 64;
+            }
+            return i;
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Labyrinth_Console
             set;
         }
 
-        int id
+        string id
         {
             get;
             set;
@@ -70,6 +70,16 @@ namespace Labyrinth_Console
             get;
             set;
         }
+        bool isPlayer
+        {
+            get;
+            set;
+        }
+        MagicLearned magic
+        {
+            get;
+            set;
+        }
         #endregion
     }
     
@@ -77,7 +87,7 @@ namespace Labyrinth_Console
     {
         //Fields
         private string _name;
-        private int _id;
+        private string _id;
         private int _level;
         private int _hp;
         private int _hpmax;
@@ -86,10 +96,11 @@ namespace Labyrinth_Console
         private int _atk;
         private int _def;
         private int _speed;
+        private bool _isPlayer;
         private MagicLearned _magic;
 
         //constructor
-        public Creature(string name, int id, int level, int hpmax, int mpmax, int atk, int def, int speed, MagicLearned magic)
+        public Creature(string name, string id, int level, int hpmax, int mpmax, int atk, int def, int speed, bool isPlayer, MagicLearned magic)
         {
             _name = name;
             _id = id;
@@ -101,6 +112,7 @@ namespace Labyrinth_Console
             _atk = atk;
             _def = def;
             _speed = speed;
+            _isPlayer = isPlayer;
             _magic = magic;
         }
 
@@ -117,7 +129,7 @@ namespace Labyrinth_Console
             }
         }
 
-        public int id
+        public string id
         {
             get
             {
@@ -222,6 +234,30 @@ namespace Labyrinth_Console
             set
             {
                 _speed = value;
+            }
+        }
+
+        public bool isPlayer
+        {
+            get
+            {
+                return _isPlayer;
+            }
+            set
+            {
+                _isPlayer = value;
+            }
+        }
+
+        public MagicLearned magic
+        {
+            get
+            {
+                return _magic;
+            }
+            set
+            {
+                _magic = value;
             }
         }
     }

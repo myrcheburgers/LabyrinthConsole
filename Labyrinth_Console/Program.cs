@@ -16,7 +16,7 @@ namespace Labyrinth_Console
             //bool exit = false;
             while (!exit)
             {
-                Console.WriteLine("Pointless text");
+                Console.WriteLine("Pointless text (Main(string[] args start)");
                 //Console.ReadKey();
                 Console.Write(Environment.NewLine);
 
@@ -281,7 +281,7 @@ namespace Labyrinth_Console
 
                 preGoblin.AdjustStats();
                 Creature goblin2 = (Creature)preGoblin;
-                goblin.id = "goblin2";
+                goblin2.id = "goblin2";
 
                 Creature[] mobArray = { goblin, goblin2 };
 
@@ -396,7 +396,7 @@ namespace Labyrinth_Console
 
             Battle testBattle = new Battle();
 
-            testBattle.RollInitiative(hero, goblin);
+            //testBattle.RollInitiative(hero, goblin);
         }
 
         static void rTest()

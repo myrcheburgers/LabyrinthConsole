@@ -137,6 +137,7 @@ namespace Labyrinth_Console
             public int speed = 30;
 
             public MagicLearned magic = new MagicLearned();
+            
 
             //levelups
             public int hpGrowth = 10;

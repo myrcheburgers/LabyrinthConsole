@@ -245,6 +245,8 @@ namespace Labyrinth_Console
                     case "mage":
                         {
                             PlayerClass.Mage tempChar = new PlayerClass.Mage();
+                            //TODO: Delete or modifiy this if ever expanded beyond testing purposes
+                            tempChar.magic.elemental = MagicList.elemental;
                             newCharacter = (Character)tempChar;
                             isValid = true;
                             break;

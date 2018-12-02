@@ -37,6 +37,8 @@ namespace Labyrinth_Console
             return null;
         }
 
+        
+
         //public string name;
 
         public class Elemental : Magic

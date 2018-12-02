@@ -53,7 +53,8 @@ namespace Labyrinth_Console
             {
                 "help",
                 "mobs",
-                "attack [ID]"
+                "attack [ID]",
+                "magic [spell] [ID]"
             };
             string input;
             string[] cmd;
@@ -88,9 +89,21 @@ namespace Labyrinth_Console
                                         foreach (Creature entry in combatants)
                                         {
                                             //yo dawg...
-                                            if (!entry.isPlayer)
+                                            if (!entry.isPlayer && entry.hp > 0)
                                             {
                                                 Console.WriteLine("{0}: [ID] {1} [HP] {2}/{3}", entry.name, entry.id, entry.hp, entry.hpmax);
+                                            }
+                                        }
+                                        break;
+                                    }
+                                case "players":
+                                case "plist":
+                                    {
+                                        foreach (Creature entry in combatants)
+                                        {
+                                            if (entry.isPlayer)
+                                            {
+                                                Console.WriteLine("{0}: [ID] {1} [HP] {2}/{3} [MP] {4}/{5}", entry.name, entry.id, entry.hp, entry.hpmax, entry.mp, entry.mpmax);
                                             }
                                         }
                                         break;
@@ -101,7 +114,7 @@ namespace Labyrinth_Console
                                         //Holy shit this is ugly... a dictionary would have been better, but I can't be arsed to go back and change things for a proof of concept
                                         foreach (Creature entry in combatants)
                                         {
-                                            if (entry.id == cmd[1])
+                                            if ((entry.id == cmd[1]) && (entry.hp > 0))
                                             {
                                                 isValid = true;
                                                 int dmg = Attack(mob, entry);
@@ -127,6 +140,77 @@ namespace Labyrinth_Console
                                         if (!isValid)
                                         {
                                             Console.WriteLine("Target ID not found. Type \"moblist\" for a list of valid target IDs.");
+                                        }
+                                        break;
+                                    }
+                                case "magic":
+                                case "m":
+                                    {
+                                        //fuggernuts
+                                        //TODO: need to change end results for cases when caster and target are the same entity
+
+                                        bool spellCast = false;
+                                        bool targetFound = false;
+                                        int spellVal;
+                                        string spell = cmd[1];
+                                        string tarID = cmd[2];
+                                        Creature[] mMobs =  new Creature[2];
+                                        Creature _caster = mob;
+                                        Creature _target = new Creature("placeholder", "phID", 0, 0, 0, 0, 0, 0, false, mob.magic);
+
+                                        foreach (Creature target in combatants)
+                                        {
+                                            if ((target.id == tarID) && (target.hp > 0))
+                                            {
+                                                targetFound = true;
+                                                if (mob.magic.elemental.ContainsKey(spell))
+                                                {
+                                                    if (mob.mp >= mob.magic.elemental[spell].mpcost)
+                                                    {
+                                                        //TODO: debug this garbo
+                                                        spellCast = true;
+                                                        mMobs = mob.magic.elemental[spell].Cast(mob, target);
+                                                        _caster = mMobs[0];
+                                                        _target = mMobs[1];
+
+                                                        Console.WriteLine("PRE {0} {1} \nPOST {2} {3}", target.name, target.hp, _target.name, _target.hp);
+
+                                                        spellVal = target.hp - _target.hp;
+                                                        Console.WriteLine("{0} casts {1} on {2} for {3} points of damage!", mob.name, mob.magic.elemental[spell].name, target.name, Convert.ToString(spellVal));
+                                                    }
+                                                }
+                                                else if (mob.magic.healing.ContainsKey(spell))
+                                                {
+                                                    if (mob.mp >= mob.magic.healing[spell].mpcost)
+                                                    {
+                                                        spellCast = true;
+                                                        mMobs = mob.magic.healing[spell].Cast(mob, target);
+                                                        _caster = mMobs[0];
+                                                        _target = mMobs[1];
+                                                        Console.WriteLine("{0} casts {1} on {2} for {3} points of restoration!", mob.name, mob.magic.healing[spell].name, target.name, _target.hp - target.hp);
+                                                    }
+                                                }
+                                            }
+
+                                            if (spellCast)
+                                            {
+                                                target.hp = _target.hp;
+                                                target.mp = _target.mp;
+
+                                                mob.hp = _caster.hp;
+                                                mob.mp = _caster.mp;
+
+                                                break;
+                                            }
+                                        }
+                                        
+                                        if (!targetFound)
+                                        {
+                                            Console.WriteLine("Target ID not found. Type \"moblist\" for a list of valid target IDs.");
+                                        }
+                                        else if (!spellCast)
+                                        {
+                                            Console.WriteLine("Spell not found.");
                                         }
                                         break;
                                     }

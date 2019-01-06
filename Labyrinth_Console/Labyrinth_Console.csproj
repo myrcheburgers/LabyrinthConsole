@@ -48,6 +48,7 @@
     <Compile Include="Character.cs" />
     <Compile Include="Magic.cs" />
     <Compile Include="MagicLearned.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="Party.cs" />
     <Compile Include="PlayerClass.cs" />
     <Compile Include="Program.cs" />

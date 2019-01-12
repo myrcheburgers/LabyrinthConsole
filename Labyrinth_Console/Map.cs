@@ -70,42 +70,58 @@ namespace Labyrinth_Console
 
         **/
 
-        bool isInitialized = false;
-        int columns;
+        //bool isInitialized = false;
+        bool isInitialized = true;
+        //only one map is ever going to be used at once, so whatever
+        static int columns;
         const int jMin = 5;
         const int jMax = 30;
-        int rows;
+        static int rows;
         const int iMin = 5;
         const int iMax = 30;
 
-        char[,] map;
+        //char[,] map;
         char wall = '#';
         char floor = ' ';
+        char playerPos = 'O';
 
+        int encounterRate;
+        //Creature implementation might need some work for this to not be a pain in the arse:
+        //Creature[] mobList;
 
-        void CreateEmpty(int userWidth, int userHeight)
+        public Map(int _rows, int _columns)
         {
-            columns = MinMaxCheck(userWidth, jMin, jMax);
-            rows = MinMaxCheck(userHeight, iMin, iMax);
-
-            isInitialized = true;
+            rows = MinMaxCheck(_rows, iMin, iMax);
+            //rows = _rows;
+            columns = MinMaxCheck(_columns, jMin, jMax);
+            //columns = _columns;
         }
 
-        void CreateBorder()
+        char[,] thisMap = new char[rows, columns];
+
+        //public void CreateEmpty(int userWidth, int userHeight)
+        //{
+        //    columns = MinMaxCheck(userWidth, jMin, jMax);
+        //    rows = MinMaxCheck(userHeight, iMin, iMax);
+
+        //    isInitialized = true;
+        //}
+
+        public void CreateBorder()
         {
             if (isInitialized)
             {
-                for (int i = 0; i < rows; i++)
+                for (int i = 0; i < thisMap.GetLength(0); i++)
                 {
-                    for (int j = 0; j < columns; j++)
+                    for (int j = 0; j < thisMap.GetLength(1); j++)
                     {
-                        if (i == 0 || j == 0 || i == rows - 1 || j == columns - 1)
+                        if (i == 0 || j == 0 || i == thisMap.GetLength(0) - 1 || j == thisMap.GetLength(1) - 1)
                         {
-                            map[i, j] = wall;
+                            thisMap[i, j] = wall;
                         }
                         else
                         {
-                            map[i, j] = floor;
+                            thisMap[i, j] = floor;
                         }
                     }
                 }
@@ -114,17 +130,70 @@ namespace Labyrinth_Console
 
         void CreateWall(int i, int j)
         {
-            map[i, j] = wall;
+            thisMap[i, j] = wall;
         }
 
-        void CreateWallLine(int iAnchor, int jAnchor, int length)
+        void CreateWallLine(int iAnchor, int jAnchor, int length, int dir)
         {
-            //TODO
+            //dir: 0 = horizontal, 1 = [y=x], -1 = [y=-x], 9 = vertical
+            switch (dir)
+            {
+                case 0:
+                    {
+                        if (jAnchor + length - 1 > jMax)
+                        {
+                            length = jMax - jAnchor;
+                        }
+
+                        for (int a = jAnchor; a < jAnchor + length; a++)
+                        {
+                            CreateWall(iAnchor, a);
+                        }
+                        break;
+                    }
+                case 1:
+                case -1:
+                    {
+                        if (jAnchor + length - 1 > jMax)
+                        {
+                            length = jMax - jAnchor;
+                        }
+                        if (iAnchor + length - 1 > iMax)
+                        {
+                            length = iMax - iAnchor;
+                        }
+
+                        for (int a = 0; a < length; a++)
+                        {
+                            CreateWall(iAnchor + a * dir, jAnchor + a);
+                        }
+
+                        break;
+                    }
+                case 9:
+                    {
+                        if (iAnchor + length - 1 > iMax)
+                        {
+                            length = iMax - iAnchor;
+                        }
+
+                        for (int a = iAnchor; a < iAnchor + length; a++)
+                        {
+                            CreateWall(a, jAnchor);
+                        }
+                        break;
+                    }
+                default:
+                    {
+                        Console.WriteLine("Invalid input");
+                        break;
+                    }
+            }
         }
 
         void CreateFloor(int i, int j)
         {
-            map[i, j] = floor;
+            thisMap[i, j] = floor;
         }
 
         void ClearMap()
@@ -132,16 +201,17 @@ namespace Labyrinth_Console
             //todo because I'm dumb
         }
 
-        void Display(char[,] inputMap)
+        public void Display()
         {
-            int rowLength = inputMap.GetLength(0);
-            int colLength = inputMap.GetLength(1);
+            int rowLength = thisMap.GetLength(0);
+            int colLength = thisMap.GetLength(1);
 
             for (int i = 0; i < rowLength; i++)
             {
                 for (int j = 0; j < colLength; j++)
                 {
-                    Console.Write("{0}", inputMap[i, j]);
+                    Console.Write("{0} ", thisMap[i, j]);
+                    //space to make the map display square-ish
                 }
                 Console.Write(Environment.NewLine);
             }

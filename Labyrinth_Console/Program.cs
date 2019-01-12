@@ -76,6 +76,11 @@ namespace Labyrinth_Console
                             }
                             break;
                         }
+                    case "maptest":
+                        {
+                            MapTest();
+                            break;
+                        }
                     case "mtest":
                     case "magictest":
                         {
@@ -358,6 +363,14 @@ namespace Labyrinth_Console
             //Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.hp, goblin.hpmax, goblin.mp, goblin.mpmax);
             //Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
             #endregion
+        }
+
+        static void MapTest()
+        {
+            Map tmap = new Map(25, 25);
+            //tmap.CreateEmpty(25, 25);
+            tmap.CreateBorder();
+            tmap.Display();
         }
 
         static void StatTests()

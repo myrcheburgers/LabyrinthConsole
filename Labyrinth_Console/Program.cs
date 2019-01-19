@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Labyrinth_Console
 {
@@ -364,13 +365,17 @@ namespace Labyrinth_Console
             //Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
             #endregion
         }
-
+        
         static void MapTest()
         {
             Map tmap = new Map(25, 25);
             //tmap.CreateEmpty(25, 25);
+            Thread.Sleep(200);
             tmap.CreateBorder();
+            tmap.InitializePlayerPosition(4, 5);
+            //Thread.Sleep(100);
             tmap.Display();
+            tmap.MovePlayer();
         }
 
         static void StatTests()

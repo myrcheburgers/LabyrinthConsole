@@ -90,12 +90,12 @@ namespace Labyrinth_Console
             //}
         }
 
-        void CreateWall(int i, int j)
+        public void CreateWall(int i, int j)
         {
             thisMap[i, j] = wall;
         }
 
-        void CreateWallLine(int iAnchor, int jAnchor, int length, int dir)
+        public void CreateWallLine(int iAnchor, int jAnchor, int length, int dir)
         {
             //dir: 0 = horizontal, 1 = [y=x], -1 = [y=-x], 9 = vertical
             switch (dir)
@@ -153,7 +153,7 @@ namespace Labyrinth_Console
             }
         }
 
-        void CreateFloor(int i, int j)
+        public void CreateFloor(int i, int j)
         {
             thisMap[i, j] = floor;
         }
@@ -265,12 +265,28 @@ namespace Labyrinth_Console
             int rowLength = thisMap.GetLength(0);
             int colLength = thisMap.GetLength(1);
 
+            Console.Clear();
+
             for (int i = 0; i < rowLength; i++)
             {
                 for (int j = 0; j < colLength; j++)
                 {
-                    Console.Write("{0} ", thisMap[i, j]);
-                    //space to make the map display square-ish
+                    if (Status.blind)
+                    {
+                        if (SightCheck(i, j))
+                        {
+                            Console.Write("{0} ", thisMap[i, j]);
+                        }
+                        else
+                        {
+                            Console.Write("  ");
+                        }
+                    }
+                    else
+                    {
+                        Console.Write("{0} ", thisMap[i, j]);
+                        //space to make the map display square-ish
+                    }
                 }
                 Console.Write(Environment.NewLine);
             }
@@ -289,6 +305,21 @@ namespace Labyrinth_Console
             else
             {
                 return input;
+            }
+        }
+
+        bool SightCheck(int i, int j)
+        {
+            //r^2 = x^2 + y^2
+            float y = (float)(i - playerPosition[0]);
+            float x = (float)(j - playerPosition[1]);
+            if ((int)Math.Sqrt(y * y + x * x) <= Status.sightRadius)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
     }

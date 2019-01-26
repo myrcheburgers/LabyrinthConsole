@@ -368,12 +368,19 @@ namespace Labyrinth_Console
         
         static void MapTest()
         {
+            /**
             Map tmap = new Map(25, 25);
             //tmap.CreateEmpty(25, 25);
-            Thread.Sleep(200);
+            //Thread.Sleep(200);
             tmap.CreateBorder();
             tmap.InitializePlayerPosition(4, 5);
             //Thread.Sleep(100);
+            tmap.Display();
+            tmap.MovePlayer();
+            **/
+            Status.blind = true;
+
+            Map tmap = MapList.Corridor1();
             tmap.Display();
             tmap.MovePlayer();
         }

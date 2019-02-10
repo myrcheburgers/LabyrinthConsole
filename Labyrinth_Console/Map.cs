@@ -26,8 +26,12 @@ namespace Labyrinth_Console
 
         **/
 
-        //bool isInitialized = false;
-        //bool isInitialized = true;
+        //int[] for i, j and int for destination map ID
+        public Dictionary<int[], DestinationCoordinates> zonePoints = new Dictionary<int[], DestinationCoordinates>();
+
+        public string areaName;
+        public int ID;
+        //bool defaultBlind;
         bool movementMode = false;
 
         //only one map is ever going to be used at once, so whatever
@@ -45,8 +49,12 @@ namespace Labyrinth_Console
 
         //char[,] map;
         char wall = '#';
-        char floor = ' ';
+        char floor = '-';
         char playerPos = 'O';
+        char zonePos = 'X';
+
+        //[i, j, destinationZoneID
+        int[] zonePoint = new int[3];
 
         int encounterRate;
         //Creature implementation might need some work for this to not be a pain in the arse:
@@ -161,13 +169,55 @@ namespace Labyrinth_Console
         void ClearMap()
         {
             //todo because I'm dumb
+            //Or not, because this is probably not needed
+        }
+        #endregion
+        
+        #region zone changes
+        public void CreateZonePoint(int i, int j, DestinationCoordinates destination)
+        {
+            thisMap[i, j] = zonePos;
+            zonePoints.Add(new int[] { i, j }, destination);
+        }
+
+        void ZoneTransition(int[] position)
+        {
+            DestinationCoordinates dest = zonePoints[position];
+            LoadNewArea(ZoneList.mapIDList[dest.MapID], new int[] { dest.iDestination, dest.jDestination });
+        }
+
+        void LoadNewArea(Map destination, int[] destinationPlayerPosition)
+        {
+            this.zonePoints = destination.zonePoints;
+
+            this.areaName = destination.areaName;
+            this.ID = destination.ID;
+            //this.movementMode = destination.movementMode;
+
+            this.thisMap = destination.thisMap; //yo dawg...
+
+            //constants: jMin, jMax, iMin, iMax, minInputTime
+            this.playerPosition = destinationPlayerPosition;
+
+            ////char[,] map;
+            //char wall = '#';
+            //char floor = '-';
+            //char playerPos = 'O';
+            //char zonePos = 'X';
+
+            ////[i, j, destinationZoneID
+            //int[] zonePoint = new int[3];
+
+            this.encounterRate = destination.encounterRate;
+            //Creature implementation might need some work for this to not be a pain in the arse:
+            //this.mobList = destination.mobList;
         }
         #endregion
 
         #region movement
         //take current position plus whatever movement, check if within bounds and if floor is present, apply movement
         //Note: Y axis of display will be inverted
-        
+
         void MoveUp()
         {
             if (thisMap[playerPosition[0] - 1, playerPosition[1]] == floor)
@@ -175,6 +225,27 @@ namespace Labyrinth_Console
                 AdjustTile(floor);
                 playerPosition[0] -= 1;
                 AdjustTile(playerPos);
+            }
+            else if (thisMap[playerPosition[0] - 1, playerPosition[1]] == zonePos)
+            {
+                //ZoneTransition(playerPosition);
+                //wipe zonepoint dictionary before rebuild
+
+                try
+                {
+                    ZoneTransition(playerPosition);
+                }
+                catch(KeyNotFoundException)
+                {
+                    movementMode = false;
+                    Console.WriteLine("Position: {0}, {1}", playerPosition[0], playerPosition[1]);
+                    Console.WriteLine("Position [array]: {0}", playerPosition);
+                    Console.WriteLine("Attempted position: {0}, {1}", playerPosition[0] - 1, playerPosition[1]);
+                    Console.WriteLine("Press Enter to continue.");
+                    Console.ReadLine();
+
+                    //TODO:Apparently ZoneTransition can't be fed the entire array?
+                }
             }
         }
         void MoveDown()
@@ -251,6 +322,14 @@ namespace Labyrinth_Console
                             Thread.Sleep(minInputTime);
                             break;
                         }
+                    case ConsoleKey.B:
+                        {
+                            //TODO: eventually delete this block
+                            Status.blind = !Status.blind;
+                            Display();
+                            Thread.Sleep(minInputTime);
+                            break;
+                        }
                     default:
                         {
                             break;
@@ -260,12 +339,29 @@ namespace Labyrinth_Console
         }
         #endregion
 
+        void PrintZoneName()
+        {
+            for (int i = 0; i < areaName.Length + 4; i++)
+            {
+                Console.Write('-');
+            }
+            Console.Write(Environment.NewLine);
+            Console.WriteLine("| {0} |", areaName);
+            for (int i = 0; i < areaName.Length + 4; i++)
+            {
+                Console.Write('-');
+            }
+            Console.Write(Environment.NewLine);
+        }
+
         public void Display()
         {
             int rowLength = thisMap.GetLength(0);
             int colLength = thisMap.GetLength(1);
 
             Console.Clear();
+
+            PrintZoneName();
 
             for (int i = 0; i < rowLength; i++)
             {
@@ -291,7 +387,8 @@ namespace Labyrinth_Console
                 Console.Write(Environment.NewLine);
             }
         }
-
+        
+        #region misc functions
         int MinMaxCheck(int input, int min, int max)
         {
             if (input < min)
@@ -322,5 +419,6 @@ namespace Labyrinth_Console
                 return false;
             }
         }
+        #endregion
     }
 }

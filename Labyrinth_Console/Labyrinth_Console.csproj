@@ -49,6 +49,7 @@
     <Compile Include="Magic.cs" />
     <Compile Include="MagicLearned.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="MapController.cs" />
     <Compile Include="MapList.cs" />
     <Compile Include="Party.cs" />
     <Compile Include="PlayerClass.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RNG.cs" />
     <Compile Include="Status.cs" />
+    <Compile Include="Structs.cs" />
     <Compile Include="Weapon.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -378,11 +378,10 @@ namespace Labyrinth_Console
             tmap.Display();
             tmap.MovePlayer();
             **/
-            Status.blind = true;
+            //Status.blind = true;
 
-            Map tmap = MapList.Corridor1();
-            tmap.Display();
-            tmap.MovePlayer();
+            int[] startPos = { 2, 2 };
+            MapController.LoadMap(1, startPos);
         }
 
         static void StatTests()

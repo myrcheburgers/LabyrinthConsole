@@ -37,8 +37,8 @@ namespace Labyrinth_Console
                 }
             }
 
-            map.CreateZonePoint(2, 4, new DestinationCoordinates(4, 3, 2));
-
+            //map.CreateZonePoint(2, 4, new DestinationCoordinates(4, 3, 2));
+            map.CreateZonePoint(new PositionKey(2, 4), new DestinationCoordinates(4, 3, 2));
             //map.InitializePlayerPosition(2, 2);
 
             return map;

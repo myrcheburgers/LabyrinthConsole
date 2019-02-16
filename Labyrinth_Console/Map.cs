@@ -27,7 +27,8 @@ namespace Labyrinth_Console
         **/
 
         //int[] for i, j and int for destination map ID
-        public Dictionary<int[], DestinationCoordinates> zonePoints = new Dictionary<int[], DestinationCoordinates>();
+        //public Dictionary<int[], DestinationCoordinates> zonePoints = new Dictionary<int[], DestinationCoordinates>();
+        public Dictionary<PositionKey, DestinationCoordinates> zonePoints = new Dictionary<PositionKey, DestinationCoordinates>();
 
         public string areaName;
         public int ID;
@@ -174,19 +175,29 @@ namespace Labyrinth_Console
         #endregion
         
         #region zone changes
-        public void CreateZonePoint(int i, int j, DestinationCoordinates destination)
+        public void CreateZonePoint(PositionKey position, DestinationCoordinates destination)
         {
-            thisMap[i, j] = zonePos;
-            zonePoints.Add(new int[] { i, j }, destination);
+            thisMap[position.i, position.j] = zonePos;
+            zonePoints.Add(position, destination);
         }
 
-        void ZoneTransition(int[] position)
+        void ZoneTransition(int iPlayer, int jPlayer)
         {
-            DestinationCoordinates dest = zonePoints[position];
-            LoadNewArea(ZoneList.mapIDList[dest.MapID], new int[] { dest.iDestination, dest.jDestination });
+            //int[] pos = { iPlayer, jPlayer };
+            try
+            {
+                DestinationCoordinates dest = zonePoints[new PositionKey(iPlayer, jPlayer)];
+                LoadNewArea(ZoneList.mapIDList[dest.MapID], dest.iDestination, dest.jDestination);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Exception:\n[iPlayer] {0}, [jPlayer] {1},\n{2}\n Press enter to continue.", iPlayer, jPlayer, e.ToString());
+                Console.ReadLine();
+            }
         }
 
-        void LoadNewArea(Map destination, int[] destinationPlayerPosition)
+        //void LoadNewArea(Map destination, int[] destinationPlayerPosition)
+        void LoadNewArea(Map destination, int iDestinationPlayerPosition, int jDestinationPlayerPosition)
         {
             this.zonePoints = destination.zonePoints;
 
@@ -197,7 +208,8 @@ namespace Labyrinth_Console
             this.thisMap = destination.thisMap; //yo dawg...
 
             //constants: jMin, jMax, iMin, iMax, minInputTime
-            this.playerPosition = destinationPlayerPosition;
+            //this.playerPosition = destinationPlayerPosition;
+            this.playerPosition = new int[] { iDestinationPlayerPosition, jDestinationPlayerPosition };
 
             ////char[,] map;
             //char wall = '#';
@@ -231,21 +243,22 @@ namespace Labyrinth_Console
                 //ZoneTransition(playerPosition);
                 //wipe zonepoint dictionary before rebuild
 
-                try
-                {
-                    ZoneTransition(playerPosition);
-                }
-                catch(KeyNotFoundException)
-                {
-                    movementMode = false;
-                    Console.WriteLine("Position: {0}, {1}", playerPosition[0], playerPosition[1]);
-                    Console.WriteLine("Position [array]: {0}", playerPosition);
-                    Console.WriteLine("Attempted position: {0}, {1}", playerPosition[0] - 1, playerPosition[1]);
-                    Console.WriteLine("Press Enter to continue.");
-                    Console.ReadLine();
+                //try
+                //{
+                playerPosition[0] -= 1;
+                ZoneTransition(playerPosition[0], playerPosition[1]);
+                //}
+                //catch(KeyNotFoundException)
+                //{
+                //    movementMode = false;
+                //    Console.WriteLine("Position: {0}, {1}", playerPosition[0], playerPosition[1]);
+                //    Console.WriteLine("Position [array]: {0}", playerPosition);
+                //    Console.WriteLine("Attempted position: {0}, {1}", playerPosition[0] - 1, playerPosition[1]);
+                //    Console.WriteLine("Press Enter to continue.");
+                //    Console.ReadLine();
 
-                    //TODO:Apparently ZoneTransition can't be fed the entire array?
-                }
+                //    //TODO:Apparently ZoneTransition can't be fed the entire array?
+                //}
             }
         }
         void MoveDown()
@@ -328,6 +341,64 @@ namespace Labyrinth_Console
                             Status.blind = !Status.blind;
                             Display();
                             Thread.Sleep(minInputTime);
+                            break;
+                        }
+                    case ConsoleKey.D:
+                        {
+                            //TODO: eventually delete this block
+                            Console.WriteLine("Current area's zone points:");
+                            foreach (KeyValuePair<PositionKey, DestinationCoordinates> entry in zonePoints)
+                            {
+                                Console.WriteLine("Target position: [i] {0}, [j] {1} \nDestination Coordinates: [i] {2}, [j] {3}, [mapID] {4}", entry.Key.i, entry.Key.j, entry.Value.iDestination, entry.Value.jDestination, entry.Value.MapID);
+                            }
+                            Thread.Sleep(minInputTime);
+                            break;
+                        }
+                    case ConsoleKey.Decimal:
+                        {
+                            //TODO: delete
+                            int[] testPos = new int[2];
+                            int iTest;
+                            int jTest;
+                            string input;
+
+                            Console.WriteLine("enter i:");
+                            input = Console.ReadLine();
+                            bool iProceed = Int32.TryParse(input, out iTest);
+                            if (iProceed)
+                            {
+                                Console.WriteLine("enter j:");
+                                input = Console.ReadLine();
+                                bool jProceed = Int32.TryParse(input, out jTest);
+                                if (jProceed)
+                                {
+                                    testPos = new int[] { iTest, jTest };
+                                    //testPos[0] = iTest;
+                                    //testPos[1] = jTest;
+                                    Console.WriteLine("[i] {0} [j] {1}", testPos[0], testPos[1]);
+
+                                    Console.WriteLine("Attempting to read Dictionary<PositionKey, DestinationCoords>()");
+                                    try
+                                    {
+                                        //Console.WriteLine("[MapID] {0}", zonePoints[testPos].MapID);
+                                        Console.WriteLine("[MapID] {0}", zonePoints[new PositionKey(iTest, jTest)].MapID);
+                                        //hory shet, that works
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Console.WriteLine("Exception: {0}", e.ToString());
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Nope.");
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("Nope.");
+                            }
+
                             break;
                         }
                     default:

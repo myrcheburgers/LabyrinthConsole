@@ -19,4 +19,16 @@ namespace Labyrinth_Console
             MapID = ID;
         }
     }
+
+    public struct PositionKey
+    {
+        public int i;
+        public int j;
+
+        public PositionKey(int _i, int _j)
+        {
+            i = _i;
+            j = _j;
+        }
+    }
 }

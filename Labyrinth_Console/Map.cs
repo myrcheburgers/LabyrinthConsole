@@ -9,31 +9,14 @@ namespace Labyrinth_Console
 {
     class Map
     {
-        //TODO: create separate (void) controller class for map creation
-
-        /**
-        
-        End goal:
-
-        ######
-        #    #
-        ###  #
-        ##   #
-        ######
-
-        With # representing walls/boundaries
-        Space or some other char to represent navigable space
-
-        **/
-
-        //int[] for i, j and int for destination map ID
-        //public Dictionary<int[], DestinationCoordinates> zonePoints = new Dictionary<int[], DestinationCoordinates>();
+        //PositionKey(int _i, int _j)
+        //DestinationCoordinates(int iDest, int jDest, int ID)
         public Dictionary<PositionKey, DestinationCoordinates> zonePoints = new Dictionary<PositionKey, DestinationCoordinates>();
 
         public string areaName;
         public int ID;
-        //bool defaultBlind;
-        bool movementMode = false;
+        public bool defaultBlind;
+        public bool movementMode = false;
 
         //only one map is ever going to be used at once, so whatever
         static int columns;
@@ -51,18 +34,20 @@ namespace Labyrinth_Console
         //char[,] map;
         char wall = '#';
         char floor = '-';
+        //char water = '~';
+        char water = 'W';
         char playerPos = 'O';
         char zonePos = 'X';
 
         //[i, j, destinationZoneID
         int[] zonePoint = new int[3];
 
-        int encounterRate;
+        public int encounterRate;
         //Creature implementation might need some work for this to not be a pain in the arse:
         //Creature[] mobList;
 
         //constructor + initialization stuff
-        char[,] thisMap;
+        public char[,] thisMap;
         public Map(int _rows, int _columns)
         {
             rows = MinMaxCheck(_rows, iMin, iMax);
@@ -77,7 +62,7 @@ namespace Labyrinth_Console
             thisMap[playerPosition[0], playerPosition[1]] = playerPos;
         }
 
-        #region wall creation
+        #region wall creation, etc
         public void CreateBorder()
         {
             //if (isInitialized)
@@ -97,6 +82,62 @@ namespace Labyrinth_Console
                     }
                 }
             //}
+        }
+
+        public void CreateCircle(int iCenter, int jCenter, int r, string type)
+        {
+            bool isValid;
+            char material = ' '; //placeholder
+            switch (type.ToLower())
+            {
+                case "wall":
+                    {
+                        isValid = true;
+                        material = wall;
+                        break;
+                    }
+                case "floor":
+                    {
+                        isValid = true;
+                        material = floor;
+                        break;
+                    }
+                case "water":
+                    {
+                        isValid = true;
+                        material = water;
+                        break;
+                    }
+                default:
+                    {
+                        isValid = false;
+                        Console.WriteLine("Invalid character type: {0}. Press enter to continue.", type.ToLower());
+                        Console.ReadLine();
+                        break;
+                    }
+            }
+
+            if (isValid)
+            {
+                //try
+                //{
+                    for (int i = iCenter - r; i <= iCenter + r; i++)
+                    {
+                        for (int j = jCenter - r; j <= jCenter + r; j++)
+                        {
+                            if (Math.Sqrt(((float)i*(float)i) + ((float)j*(float)j)) <= (float)r)
+                            {
+                                thisMap[i, j] = material;
+                            }
+                        }
+                    }
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine("Exception: {0}\nPress enter to continue.", e.ToString());
+                //    Console.ReadLine();
+                //}
+            }
         }
 
         public void CreateWall(int i, int j)
@@ -183,11 +224,13 @@ namespace Labyrinth_Console
 
         void ZoneTransition(int iPlayer, int jPlayer)
         {
-            //int[] pos = { iPlayer, jPlayer };
             try
             {
                 DestinationCoordinates dest = zonePoints[new PositionKey(iPlayer, jPlayer)];
                 LoadNewArea(ZoneList.mapIDList[dest.MapID], dest.iDestination, dest.jDestination);
+                //Map destinationMap = new Map(rows, columns);
+                //destinationMap = ZoneList.mapIDList[dest.MapID];
+                //LoadNewArea(destinationMap, dest.iDestination, dest.jDestination);
             }
             catch (Exception e)
             {
@@ -195,14 +238,17 @@ namespace Labyrinth_Console
                 Console.ReadLine();
             }
         }
-
-        //void LoadNewArea(Map destination, int[] destinationPlayerPosition)
+        
         void LoadNewArea(Map destination, int iDestinationPlayerPosition, int jDestinationPlayerPosition)
         {
+            // 2/23/19: this only works for the first zone transition...?
+            // ...because it's directly modifying the first dictionary entry loaded
+
             this.zonePoints = destination.zonePoints;
 
             this.areaName = destination.areaName;
             this.ID = destination.ID;
+            Status.blind = destination.defaultBlind;
             //this.movementMode = destination.movementMode;
 
             this.thisMap = destination.thisMap; //yo dawg...
@@ -245,8 +291,11 @@ namespace Labyrinth_Console
 
                 //try
                 //{
+                AdjustTile(floor);
                 playerPosition[0] -= 1;
+                //AdjustTile(zonePos);
                 ZoneTransition(playerPosition[0], playerPosition[1]);
+                AdjustTile(playerPos);
                 //}
                 //catch(KeyNotFoundException)
                 //{
@@ -269,6 +318,14 @@ namespace Labyrinth_Console
                 playerPosition[0] += 1;
                 AdjustTile(playerPos);
             }
+            else if (thisMap[playerPosition[0] + 1, playerPosition[1]] == zonePos)
+            {
+
+                AdjustTile(floor);
+                playerPosition[0] += 1;
+                ZoneTransition(playerPosition[0], playerPosition[1]);
+                AdjustTile(playerPos);
+            }
         }
         void MoveLeft()
         {
@@ -278,6 +335,14 @@ namespace Labyrinth_Console
                 playerPosition[1] -= 1;
                 AdjustTile(playerPos);
             }
+            else if (thisMap[playerPosition[0], playerPosition[1] - 1] == zonePos)
+            {
+
+                AdjustTile(floor);
+                playerPosition[1] -= 1;
+                ZoneTransition(playerPosition[0], playerPosition[1]);
+                AdjustTile(playerPos);
+            }
         }
         void MoveRight()
         {
@@ -285,6 +350,14 @@ namespace Labyrinth_Console
             {
                 AdjustTile(floor);
                 playerPosition[1] += 1;
+                AdjustTile(playerPos);
+            }
+            else if (thisMap[playerPosition[0], playerPosition[1] + 1] == zonePos)
+            {
+
+                AdjustTile(floor);
+                playerPosition[1] += 1;
+                ZoneTransition(playerPosition[0], playerPosition[1]);
                 AdjustTile(playerPos);
             }
         }
@@ -351,6 +424,7 @@ namespace Labyrinth_Console
                             {
                                 Console.WriteLine("Target position: [i] {0}, [j] {1} \nDestination Coordinates: [i] {2}, [j] {3}, [mapID] {4}", entry.Key.i, entry.Key.j, entry.Value.iDestination, entry.Value.jDestination, entry.Value.MapID);
                             }
+                            Console.WriteLine("Current Map ID: {0}", this.ID);
                             Thread.Sleep(minInputTime);
                             break;
                         }

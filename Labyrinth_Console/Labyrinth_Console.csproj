@@ -45,6 +45,7 @@
     <Compile Include="Battle.cs" />
     <Compile Include="Bestiary.cs" />
     <Compile Include="Creature.cs" />
+    <Compile Include="Creature_old.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Magic.cs" />
     <Compile Include="MagicLearned.cs" />

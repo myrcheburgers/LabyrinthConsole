@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Labyrinth_Console
 {
-    public static class Party
+    static class Party
     {
         public static Dictionary<string, Character> memberList = new Dictionary<string, Character>();
 
@@ -27,10 +27,15 @@ namespace Labyrinth_Console
             Console.WriteLine("{0} removed from party.", member.name);
         }
 
+        public static void RemoveAll()
+        {
+            memberList.Clear();
+        }
+
         public static void PrintStats(Character member)
         {
             Console.WriteLine("{0}:", member.name);
-            Console.Write("    Job: {0}, ID: {1}, HP: {2}/{3}, MP: {4}/{5}", member.job, member.id, member.hp, member.hpmax, member.mp, member.mpmax);
+            Console.Write("    Job: {0}, ID: {1}, HP: {2}/{3}, MP: {4}/{5}", member.playerClass.name, member.id, member.vitals.hp, member.vitals.hpmax, member.vitals.mp, member.vitals.mpmax);
             Console.Write(Environment.NewLine);
         }
     }

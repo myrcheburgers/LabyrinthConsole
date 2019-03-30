@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Labyrinth_Console
 {
-    public class MagicLearned
+    class MagicLearned
     {
         //for storing learned spells for each character/creature
 

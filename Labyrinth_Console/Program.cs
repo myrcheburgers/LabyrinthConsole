@@ -176,7 +176,9 @@ namespace Labyrinth_Console
                 {
                     Console.WriteLine("Creating character {0} of {1}.", i + 1, partySize);
 
-                    CreateCharacter();
+                    //CreateCharacter();
+                    CharacterCreation characterCreation = new CharacterCreation();
+                    characterCreation.CreateToParty();
                 }
             }
 
@@ -187,11 +189,12 @@ namespace Labyrinth_Console
                 foreach (KeyValuePair<string, Character> entry in Party.memberList)
                 {
                     Character pm = entry.Value;
-                    Console.WriteLine("Name: {0}, Job: {1}, Level: {2}, HP:{3}/{4}, MP:{5}/{6}", pm.name, pm.job, pm.level, pm.hp, pm.hpmax, pm.mp, pm.mpmax);
+                    Console.WriteLine("Name: {0}, Job: {1}, Level: {2}, HP:{3}/{4}, MP:{5}/{6}", pm.name, pm.job, pm.level, pm.vitals.hp, pm.vitals.hpmax, pm.vitals.mp, pm.vitals.mpmax);
                 }
             }
         }
 
+        /*
         static void CreateCharacter()
         {
             bool isValid = false;
@@ -223,7 +226,7 @@ namespace Labyrinth_Console
             while (!isValid)
             {
                 Console.Write("Enter character class. (Current options:");
-                foreach (string job in ClassNames.names)
+                foreach (string job in PlayerClass.classNames)
                 {
                     Console.Write(" [{0}]", job);
                 }
@@ -236,21 +239,21 @@ namespace Labyrinth_Console
                 {
                     case "warrior":
                         {
-                            PlayerClass.Warrior tempChar = new PlayerClass.Warrior();
+                            PlayerClass_Old.Warrior tempChar = new PlayerClass_Old.Warrior();
                             newCharacter = (Character)tempChar;
                             isValid = true;
                             break;
                         }
                     case "berserker":
                         {
-                            PlayerClass.Berserker tempChar = new PlayerClass.Berserker();
+                            PlayerClass_Old.Berserker tempChar = new PlayerClass_Old.Berserker();
                             newCharacter = (Character)tempChar;
                             isValid = true;
                             break;
                         }
                     case "mage":
                         {
-                            PlayerClass.Mage tempChar = new PlayerClass.Mage();
+                            PlayerClass_Old.Mage tempChar = new PlayerClass_Old.Mage();
                             //TODO: Delete or modifiy this if ever expanded beyond testing purposes
                             tempChar.magic.elemental = MagicList.elemental;
                             newCharacter = (Character)tempChar;
@@ -270,6 +273,7 @@ namespace Labyrinth_Console
             newCharacter.mp = newCharacter.mpmax;
             Party.AddMember(newCharacter);
         }
+        */
 
         #endregion
 
@@ -307,12 +311,16 @@ namespace Labyrinth_Console
             //Build mage, build enemy, implement Magic
 
             //mage builder
+            //Character newCharacter = new Character();
+            //PlayerClass_Old.Mage tempChar = new PlayerClass_Old.Mage();
+            //newCharacter = (Character)tempChar;
+            //newCharacter.name = "Mage";
+            //newCharacter.hp = newCharacter.hpmax;
+            //newCharacter.mp = newCharacter.mpmax;
             Character newCharacter = new Character();
-            PlayerClass.Mage tempChar = new PlayerClass.Mage();
-            newCharacter = (Character)tempChar;
             newCharacter.name = "Mage";
-            newCharacter.hp = newCharacter.hpmax;
-            newCharacter.mp = newCharacter.mpmax;
+            newCharacter.playerClass = PlayerClass.Mage;
+            newCharacter.InitializeVitals();
 
             //newCharacter.magic.elemental.Add(MagicList.elemental["fire"].name, MagicList.elemental["fire"]);
             newCharacter.magic.elemental.Add("fire", MagicList.elemental["fire"]);
@@ -326,8 +334,8 @@ namespace Labyrinth_Console
             goblin.id = "placeholderID";
 
             //Pre-cast
-            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.hp, goblin.hpmax, goblin.mp, goblin.mpmax);
-            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
+            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.vitals.hp, goblin.vitals.hpmax, goblin.vitals.mp, goblin.vitals.mpmax);
+            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.vitals.hp, newCharacter.vitals.hpmax, newCharacter.vitals.mp, newCharacter.vitals.mpmax);
 
             //cast
             //Console.WriteLine("{0} casts {1}.", newCharacter.name, MagicList.elemental["fire"].name);
@@ -338,14 +346,16 @@ namespace Labyrinth_Console
             //creaArr = MagicList.elemental["fire"].Cast((Creature)newCharacter, goblin);
             creaArr = newCharacter.magic.elemental["fire"].Cast((Creature)newCharacter, goblin);
 
-            newCharacter.mp = creaArr[0].mp;
+            newCharacter.vitals.mp = creaArr[0].vitals.mp;
             goblin = creaArr[1];
 
             //post-cast
-            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.hp, goblin.hpmax, goblin.mp, goblin.mpmax);
-            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.hp, newCharacter.hpmax, newCharacter.mp, newCharacter.mpmax);
+            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", goblin.name, goblin.vitals.hp, goblin.vitals.hpmax, goblin.vitals.mp, goblin.vitals.mpmax);
+            Console.WriteLine("{0}: HP {1}/{2} MP {3}/{4}", newCharacter.name, newCharacter.vitals.hp, newCharacter.vitals.hpmax, newCharacter.vitals.mp, newCharacter.vitals.mpmax);
 
             //that... actually works?
+
+            Party.RemoveAll();
 
             #region nope
             ////post-cast
@@ -418,7 +428,7 @@ namespace Labyrinth_Console
             preGoblin.AdjustStats();
             Creature goblin = (Creature)preGoblin;
             goblin.id = "placeholderID";
-            Console.WriteLine("Name: {0} Level: {1} ID: {2} Max HP: {3} Current HP: {4} Max MP: {5} Current MP: {6} ATK: {7} DEF: {8} SPD: {9}", goblin.name, goblin.level, goblin.id, goblin.hpmax, goblin.hp, goblin.mpmax, goblin.mp, goblin.atk, goblin.def, goblin.speed);
+            Console.WriteLine("Name: {0} Level: {1} ID: {2} Max HP: {3} Current HP: {4} Max MP: {5} Current MP: {6} ATK: {7} DEF: {8} SPD: {9}", goblin.name, goblin.level, goblin.id, goblin.vitals.hpmax, goblin.vitals.hp, goblin.vitals.mpmax, goblin.vitals.mp, goblin.vitals.atk, goblin.vitals.def, goblin.vitals.speed);
 
             Battle testBattle = new Battle();
 

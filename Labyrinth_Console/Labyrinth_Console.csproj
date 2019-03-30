@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Battle.cs" />
     <Compile Include="Bestiary.cs" />
+    <Compile Include="CharacterCreation.cs" />
     <Compile Include="Creature.cs" />
     <Compile Include="Creature_old.cs" />
     <Compile Include="Character.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="MapList.cs" />
     <Compile Include="Party.cs" />
     <Compile Include="PlayerClass.cs" />
+    <Compile Include="PlayerClass_Old.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RNG.cs" />

@@ -6,168 +6,50 @@ using System.Threading.Tasks;
 
 namespace Labyrinth_Console
 {
-    public static class ClassNames
+    public struct PlayerClass
     {
-        public static string[] names = { "Warrior", "Berserker", "Mage" };
+        public string name;
+        public string abbreviation;
 
-        public static readonly Dictionary<string, string> abbreviate = new Dictionary<string, string>()
+        // base stats
+        public int baseHP;
+        public int baseMP;
+        public int baseATK;
+        public int baseDEF;
+        public int baseSpeed;
+
+        // levelups
+        public int growthHP;
+        public int growthMP;
+        public int growthATK;
+        public int growthDEF;
+
+        public PlayerClass(string name, string abbreviation, int baseHP, int baseMP, int baseATK, int baseDEF, int baseSpeed, int growthHP, int growthMP, int growthATK, int growthDEF)
         {
-            {"Warrior", "WAR" },
-            {"Berserker", "BER" },
-            {"Mage", "MAG" }
-        };
-    }
-
-    class PlayerClass
-    {
-        /**
-         * From Character.cs:
-         * 
-         * Numbers notes... let's say:
-         *      Growth -- 100 points divided between each stat... could totally use this to make a lulzy glass cannon build
-         *      HP, MP -- 200 points divided between each (level 1)
-         *      ATK/DEF -- 50? points divided between each (level 1)
-         * 
-         *      Could use MPmax for spell potency modifier since I don't feel like adding more stats (TODO: add Magic class)
-         * 
-         **/
-
-        public class Warrior
-        {
-            public string name;
-            public string job = "Warrior";
-
-            public int hpmax = 175;
-            public int mpmax = 25;
-
-            public int atk = 25;
-            public int def = 25;
-            public int speed = 30;
-
-            public MagicLearned magic = new MagicLearned();
-
-            //levelups
-            public int hpGrowth = 30;
-            public int mpGrowth = 10;
-            public int atkGrowth = 30;
-            public int defGrowth = 30;
-
-            //explicit type conversion
-            public static explicit operator Character(Warrior obj)
-            {
-                Character output = new Character()
-                {
-                    name = obj.name,
-                    hpmax = obj.hpmax,
-                    mpmax = obj.mpmax,
-                    atk = obj.atk,
-                    def = obj.def,
-                    speed = obj.speed,
-
-                    magic = obj.magic,
-
-                    hpGrowth = obj.hpGrowth,
-                    mpGrowth = obj.mpGrowth,
-                    atkGrowth = obj.atkGrowth,
-                    defGrowth = obj.defGrowth,
-                    job = obj.job
-                };
-                //ID = 0 is a placeholder
-                //alt implementation in Bestiary.Goblin2
-                return output;
-            }
+            this.name = name;
+            this.abbreviation = abbreviation;
+            this.baseHP = baseHP;
+            this.baseMP = baseMP;
+            this.baseATK = baseATK;
+            this.baseDEF = baseDEF;
+            this.baseSpeed = baseSpeed;
+            this.growthHP = growthHP;
+            this.growthMP = growthMP;
+            this.growthATK = growthATK;
+            this.growthDEF = growthDEF;
         }
 
-        public class Berserker
-        {
-            public string name;
-            public string job = "Berserker";
+        // player class presets
+        static readonly PlayerClass debug = new PlayerClass("Debug Queen", "BUG", 9999, 9999, 999, 999, 999, 999, 999, 999, 999);
+        static readonly PlayerClass warriorClass = new PlayerClass("Warrior", "WAR", 175, 25, 25, 25, 30, 30, 10, 30, 30);
+        static readonly PlayerClass berserkerClass = new PlayerClass("Berserker", "BER", 190, 10, 35, 15, 30, 35, 5, 40, 20);
+        static readonly PlayerClass mageClass = new PlayerClass("Mage", "MAG", 120, 80, 15, 15, 30, 10, 50, 20, 20);
 
-            public int hpmax = 190;
-            public int mpmax = 10;
+        public static readonly string[] classNames = { "Warrior", "Berserker", "Mage" };
 
-            public int atk = 35;
-            public int def = 15;
-            public int speed = 30;
-
-            public MagicLearned magic = new MagicLearned();
-
-            //levelups
-            public int hpGrowth = 35;
-            public int mpGrowth = 5;
-            public int atkGrowth = 40;
-            public int defGrowth = 20;
-
-            //explicit type conversion
-            public static explicit operator Character(Berserker obj)
-            {
-                Character output = new Character()
-                {
-                    name = obj.name,
-                    hpmax = obj.hpmax,
-                    mpmax = obj.mpmax,
-                    atk = obj.atk,
-                    def = obj.def,
-                    speed = obj.speed,
-
-                    magic = obj.magic,
-
-                    hpGrowth = obj.hpGrowth,
-                    mpGrowth = obj.mpGrowth,
-                    atkGrowth = obj.atkGrowth,
-                    defGrowth = obj.defGrowth,
-                    job = obj.job
-                };
-                //ID = 0 is a placeholder
-                //alt implementation in Bestiary.Goblin2
-                return output;
-            }
-        }
-
-        public class Mage
-        {
-            public string name;
-            public string job = "Mage";
-
-            public int hpmax = 120;
-            public int mpmax = 80;
-
-            public int atk = 15;
-            public int def = 15;
-            public int speed = 30;
-
-            public MagicLearned magic = new MagicLearned();
-            
-
-            //levelups
-            public int hpGrowth = 10;
-            public int mpGrowth = 50;
-            public int atkGrowth = 20;
-            public int defGrowth = 20;
-
-            //explicit type conversion
-            public static explicit operator Character(Mage obj)
-            {
-                Character output = new Character() {
-                    name = obj.name,
-                    hpmax = obj.hpmax,
-                    mpmax = obj.mpmax,
-                    atk = obj.atk,
-                    def = obj.def,
-                    speed = obj.speed,
-
-                    magic = obj.magic,
-
-                    hpGrowth = obj.hpGrowth,
-                    mpGrowth = obj.mpGrowth,
-                    atkGrowth = obj.atkGrowth,
-                    defGrowth = obj.defGrowth,
-                    job = obj.job
-                };
-                //ID = 0 is a placeholder
-                //alt implementation in Bestiary.Goblin2
-                return output;
-            }
-        }
+        public static PlayerClass DebugQueen { get { return debug; } }
+        public static PlayerClass Warrior { get { return warriorClass; } }
+        public static PlayerClass Berserker { get { return berserkerClass; } }
+        public static PlayerClass Mage { get { return mageClass; } } // need to add magic elsewhere
     }
 }

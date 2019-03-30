@@ -7,7 +7,7 @@ using static Labyrinth_Console.RNG;
 
 namespace Labyrinth_Console
 {
-    public abstract class Bestiary
+    abstract class Bestiary
     {
         public string name;
         public int level;
@@ -38,7 +38,7 @@ namespace Labyrinth_Console
         #endregion
     }
 
-    public static class Goblin
+    static class Goblin
     {
         //string name;
         //int level;
@@ -94,7 +94,7 @@ namespace Labyrinth_Console
         }
     }
 
-    public class Goblin2
+    class Goblin2
     {
         //string name;
         //int level;

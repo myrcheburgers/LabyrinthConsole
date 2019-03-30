@@ -15,7 +15,7 @@ namespace Labyrinth_Console
         };
     }
 
-    public class Weapon
+    class Weapon
     {
         public string name;
 
@@ -23,6 +23,11 @@ namespace Labyrinth_Console
         public int acc;
 
         public int numAttacks;
+
+        // damage types -- eg, for 100% slashing, type.blunt = 0; type.slashing = 100; type.piercing = 0;
+        // same concept for magic damage
+        public PhysicalResistance damageTypePhysical;
+        public ElementalResistance damgeTypeElemental;
 
         //constructor
         public Weapon(string _name, int _dmg, int _acc, int _numAttacks)

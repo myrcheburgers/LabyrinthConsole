@@ -38,7 +38,7 @@ namespace Labyrinth_Console
             Console.WriteLine("Turn order:");
             foreach (Creature entity in combatants)
             {
-                Console.WriteLine("    {0} (Speed: {1}, isPlayer = {2})", entity.name, entity.speed, entity.isPlayer);
+                Console.WriteLine("    {0} (Speed: {1}, isPlayer = {2})", entity.name, entity.vitals.speed, entity.isPlayer);
             }
 
             this.Combat(combatants);
@@ -65,7 +65,7 @@ namespace Labyrinth_Console
                 Console.WriteLine("Starting turn {0}", turnNumber);
                 foreach (Creature mob in combatants)
                 {
-                    if (mob.isPlayer && mob.hp > 0)
+                    if (mob.isPlayer && mob.vitals.hp > 0)
                     {
                         //command tree here
                         while (!isValid)
@@ -89,9 +89,9 @@ namespace Labyrinth_Console
                                         foreach (Creature entry in combatants)
                                         {
                                             //yo dawg...
-                                            if (!entry.isPlayer && entry.hp > 0)
+                                            if (!entry.isPlayer && entry.vitals.hp > 0)
                                             {
-                                                Console.WriteLine("{0}: [ID] {1} [HP] {2}/{3}", entry.name, entry.id, entry.hp, entry.hpmax);
+                                                Console.WriteLine("{0}: [ID] {1} [HP] {2}/{3}", entry.name, entry.id, entry.vitals.hp, entry.vitals.hpmax);
                                             }
                                         }
                                         break;
@@ -103,7 +103,7 @@ namespace Labyrinth_Console
                                         {
                                             if (entry.isPlayer)
                                             {
-                                                Console.WriteLine("{0}: [ID] {1} [HP] {2}/{3} [MP] {4}/{5}", entry.name, entry.id, entry.hp, entry.hpmax, entry.mp, entry.mpmax);
+                                                Console.WriteLine("{0}: [ID] {1} [HP] {2}/{3} [MP] {4}/{5}", entry.name, entry.id, entry.vitals.hp, entry.vitals.hpmax, entry.vitals.mp, entry.vitals.mpmax);
                                             }
                                         }
                                         break;
@@ -114,14 +114,14 @@ namespace Labyrinth_Console
                                         //Holy shit this is ugly... a dictionary would have been better, but I can't be arsed to go back and change things for a proof of concept
                                         foreach (Creature entry in combatants)
                                         {
-                                            if ((entry.id == cmd[1]) && (entry.hp > 0))
+                                            if ((entry.id == cmd[1]) && (entry.vitals.hp > 0))
                                             {
                                                 isValid = true;
                                                 int dmg = Attack(mob, entry);
                                                 Console.WriteLine("{0} attacks the {1} for {2} points of damage.", mob.name, entry.name, dmg);
-                                                entry.hp -= dmg;
+                                                entry.vitals.hp -= dmg;
 
-                                                if (entry.hp <= 0)
+                                                if (entry.vitals.hp <= 0)
                                                 {
                                                     Console.WriteLine("The {0} [{1}] has been defeated!", entry.name, entry.id);
                                                     //if (!entry.isPlayer)
@@ -160,12 +160,12 @@ namespace Labyrinth_Console
 
                                         foreach (Creature target in combatants)
                                         {
-                                            if ((target.id == tarID) && (target.hp > 0))
+                                            if ((target.id == tarID) && (target.vitals.hp > 0))
                                             {
                                                 targetFound = true;
                                                 if (mob.magic.elemental.ContainsKey(spell))
                                                 {
-                                                    if (mob.mp >= mob.magic.elemental[spell].mpcost)
+                                                    if (mob.vitals.mp >= mob.magic.elemental[spell].mpcost)
                                                     {
                                                         //TODO: debug this garbo
                                                         spellCast = true;
@@ -173,32 +173,32 @@ namespace Labyrinth_Console
                                                         _caster = mMobs[0];
                                                         _target = mMobs[1];
 
-                                                        Console.WriteLine("PRE {0} {1} \nPOST {2} {3}", target.name, target.hp, _target.name, _target.hp);
+                                                        Console.WriteLine("PRE {0} {1} \nPOST {2} {3}", target.name, target.vitals.hp, _target.name, _target.vitals.hp);
 
-                                                        spellVal = target.hp - _target.hp;
+                                                        spellVal = target.vitals.hp - _target.vitals.hp;
                                                         Console.WriteLine("{0} casts {1} on {2} for {3} points of damage!", mob.name, mob.magic.elemental[spell].name, target.name, Convert.ToString(spellVal));
                                                     }
                                                 }
                                                 else if (mob.magic.healing.ContainsKey(spell))
                                                 {
-                                                    if (mob.mp >= mob.magic.healing[spell].mpcost)
+                                                    if (mob.vitals.mp >= mob.magic.healing[spell].mpcost)
                                                     {
                                                         spellCast = true;
                                                         mMobs = mob.magic.healing[spell].Cast(mob, target);
                                                         _caster = mMobs[0];
                                                         _target = mMobs[1];
-                                                        Console.WriteLine("{0} casts {1} on {2} for {3} points of restoration!", mob.name, mob.magic.healing[spell].name, target.name, _target.hp - target.hp);
+                                                        Console.WriteLine("{0} casts {1} on {2} for {3} points of restoration!", mob.name, mob.magic.healing[spell].name, target.name, _target.vitals.hp - target.vitals.hp);
                                                     }
                                                 }
                                             }
 
                                             if (spellCast)
                                             {
-                                                target.hp = _target.hp;
-                                                target.mp = _target.mp;
+                                                target.vitals.hp = _target.vitals.hp;
+                                                target.vitals.mp = _target.vitals.mp;
 
-                                                mob.hp = _caster.hp;
-                                                mob.mp = _caster.mp;
+                                                mob.vitals.hp = _caster.vitals.hp;
+                                                mob.vitals.mp = _caster.vitals.mp;
 
                                                 break;
                                             }
@@ -218,7 +218,7 @@ namespace Labyrinth_Console
                         }
                         isValid = false;
                     }
-                    else if (mob.hp > 0)
+                    else if (mob.vitals.hp > 0)
                     {
                         int iPlayer;
                         iPlayer = rng2.Next(combatants.Count);
@@ -227,15 +227,16 @@ namespace Labyrinth_Console
                             iPlayer = rng2.Next(combatants.Count);
                         }
                         
-                        Console.WriteLine("Enemy turn: {0} [{1}] [HP {2}/{3}]", mob.name, mob.id, mob.hp, mob.hpmax);
+                        Console.WriteLine("Enemy turn: {0} [{1}] [HP {2}/{3}]", mob.name, mob.id, mob.vitals.hp, mob.vitals.hpmax);
                         int dmg = Attack(mob, combatants[iPlayer]);
-                        combatants[iPlayer].hp -= dmg;
+                        combatants[iPlayer].vitals.hp -= dmg;
                         Console.WriteLine("The {0} [{1}] attacks {2} for {3} points of damage.", mob.name, mob.id, combatants[iPlayer].name, dmg);
                     }
                 }
 
-                //deathcheck
-                combatants.RemoveAll(r => !r.isPlayer && r.hp <= 0);
+                // deathcheck
+                // TODO: make this an action/event
+                combatants.RemoveAll(r => !r.isPlayer && r.vitals.hp <= 0);
 
                 turnNumber++;
                 Console.WriteLine("Key to continue");
@@ -269,7 +270,7 @@ namespace Labyrinth_Console
 
         public int Attack(Creature attacker, Creature defender)
         {
-            float damage = 5 + (attacker.atk / defender.def);
+            float damage = 5 + (attacker.vitals.atk / defender.vitals.def);
             damage += rng.rndInt((int)Math.Floor(damage / 10) * -1, (int)Math.Floor(damage / 10));
 
             return (int)Math.Floor(damage);

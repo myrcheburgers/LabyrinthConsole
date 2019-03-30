@@ -34,13 +34,16 @@ namespace Labyrinth_Console
             this.magic = magic;
         }
 
-        public Creature(string name, string id, Vitals vitals, bool isPlayer, MagicLearned magic)
+        public Creature(string name, string id, int level, Vitals vitals, bool isPlayer, MagicLearned magic, ElementalResistance eRes, PhysicalResistance pRes)
         {
             this.name = name;
             this.id = id;
+            this.level = level;
             this.vitals = vitals;
             this.isPlayer = isPlayer;
             this.magic = magic;
+            this.eRes = eRes;
+            this.pRes = pRes;
         }
 
         public Creature()
@@ -55,7 +58,8 @@ namespace Labyrinth_Console
             this.vitals.def = 25;
             this.vitals.speed = 30;
             this.isPlayer = false;
-
+            this.eRes = ElementalResistance.Standard;
+            this.pRes = PhysicalResistance.standard;
         }
 
         public void SetStatsFromCSV()

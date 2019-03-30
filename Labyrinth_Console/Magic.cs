@@ -29,8 +29,9 @@ namespace Labyrinth_Console
         //};
     }
 
-    public abstract class Magic
+    abstract class Magic
     {
+        //TODO: learn how to use events and listeners for damage dealt
         //TODO: Enfeebling and enhancing -- add an effects<Magic> list to creatures and characters with HP/Acc/etc and time remaining, apply at beginning or end of each turn during battle
         public virtual Creature[] Cast(Creature caster, Creature target)
         {
@@ -56,8 +57,8 @@ namespace Labyrinth_Console
                 //TODO: implement elemental resistances
                 Creature[] creatureArr = new Creature[2];
 
-                caster.mp -= mpcost;
-                target.hp -= (int)Math.Floor((float)damage * (float)caster.mpmax / 10);
+                caster.vitals.mp -= mpcost;
+                target.vitals.hp -= (int)Math.Floor((float)damage * (float)caster.vitals.mpmax / 10);
 
                 creatureArr[0] = caster;
                 creatureArr[1] = target;
@@ -86,10 +87,10 @@ namespace Labyrinth_Console
             {
                 Creature[] creatureArr = new Creature[2];
 
-                modifier = (float)caster.mpmax / 10;
+                modifier = (float)caster.vitals.mpmax / 10;
 
-                caster.mp -= mpcost;
-                target.hp += (int)Math.Floor((float)baseRecovery * modifier);
+                caster.vitals.mp -= mpcost;
+                target.vitals.hp += (int)Math.Floor((float)baseRecovery * modifier);
 
                 creatureArr[0] = caster;
                 creatureArr[1] = target;

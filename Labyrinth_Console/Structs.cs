@@ -58,7 +58,7 @@ namespace Labyrinth_Console
         static readonly ElementalResistance standardResistance = new ElementalResistance(100, 100, 100, 100, 100, 100);
 
         // Shorthand for writing @@ElementalResistance(100, 100, 100, 100, 100, 100)@@
-        public static ElementalResistance standard { get { return standardResistance; } }
+        public static ElementalResistance Standard { get { return standardResistance; } }
     }
 
     public struct PhysicalResistance

@@ -15,6 +15,9 @@ namespace Labyrinth_Console
         }
         public Character CreateCharacterDialog()
         {
+            //string setName = SetName();
+            //Console.WriteLine("Name set: {0}", setName);
+            
             Character character = new Character
             {
                 name = SetName(),
@@ -35,7 +38,7 @@ namespace Labyrinth_Console
         string SetName()
         {
             bool isValid = false;
-            bool confirm;
+            bool confirm = false;
             string input = "";
             string affirm = "";
             string prompt;
@@ -44,7 +47,7 @@ namespace Labyrinth_Console
 
             while (!isValid)
             {
-                confirm = false;
+                //confirm = false;
                 count2 = 0;
                 prompt = count1 > 0 ? "Let's try again. Enter character name." : "Enter character name.";
                 count1++;
@@ -59,6 +62,7 @@ namespace Labyrinth_Console
                 while (!confirm)
                 {
                     prompt = count2 > 0 ? "Yes or no, dumdum. Is your name " + input + " ?" : "Is your name " + input + " ?";
+                    Console.WriteLine(prompt);
                     count2++;
                     affirm = Console.ReadLine();
                     switch (affirm.ToLower())
@@ -100,15 +104,12 @@ namespace Labyrinth_Console
                             }
                     }
                 }
-                
             }
-
             return input;
         }
 
         PlayerClass SetClass()
         {
-            
             bool isValid = false;
             string input;
             string[] jobs = { "Warrior", "Berserker", "Mage" };

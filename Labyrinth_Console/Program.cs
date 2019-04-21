@@ -179,6 +179,8 @@ namespace Labyrinth_Console
                     //CreateCharacter();
                     CharacterCreation characterCreation = new CharacterCreation();
                     characterCreation.CreateToParty();
+
+                    Console.WriteLine("Character {0} of {1} created.", i + 1, partySize);
                 }
             }
 

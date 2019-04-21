@@ -8,7 +8,8 @@ namespace Labyrinth_Console
 {
     class Battle
     {
-        //Note: isPlayer field (bool) has been added to Creature class
+        // Note: isPlayer field (bool) has been added to Creature class
+        // This entire class could probably use a rewrite
 
         RNG rng = new RNG();
         static Random rng2 = new Random();
@@ -238,11 +239,32 @@ namespace Labyrinth_Console
                 // TODO: make this an action/event
                 combatants.RemoveAll(r => !r.isPlayer && r.vitals.hp <= 0);
 
+                // win check
+                int mobCount = 0;
+                foreach (Creature combatant in combatants)
+                {
+                    if (!combatant.isPlayer)
+                    {
+                        mobCount++;
+                    }
+                }
+                if (mobCount == 0)
+                {
+                    victory = true;
+                }
+
                 turnNumber++;
                 Console.WriteLine("Key to continue");
                 Console.ReadLine();
             }
+
+            if (victory)
+            {
+                Console.WriteLine("Obligatory placeholder victory text goes here.");
+            }
         }
+
+        
 
         public List<Creature> SetTurnOrder(List<Creature> combatants)
         {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Reflection;
 
 namespace Labyrinth_Console
 {
@@ -52,6 +53,13 @@ namespace Labyrinth_Console
                         {
                             isValid = true;
                             BattleTest();
+                            break;
+                        }
+                    case "creaturetest":
+                    case "ctest":
+                        {
+                            isValid = true;
+                            CreatureTest();
                             break;
                         }
                     case "createparty":
@@ -140,6 +148,7 @@ namespace Labyrinth_Console
                 cmd = Console.ReadLine().ToLower();
                 switch (cmd)
                 {
+                    // eventually change to Int32.TryParse()?
                     case "one":
                     case "1":
                         {
@@ -306,6 +315,28 @@ namespace Labyrinth_Console
                 Battle battle = new Battle();
                 battle.Start(charArray, mobArray);
             }
+        }
+
+        static void CreatureTest()
+        {
+            // vanilla
+            Creature gob = Creature.goblin;
+            Console.WriteLine("\nBase Stats [{0} Vitals]:", gob.name);
+            foreach (var stat in typeof(Vitals).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+            {
+                Console.WriteLine("{0} = {1}", stat.Name, stat.GetValue(gob.vitals));
+            }
+
+            // goblin +1
+            gob.AdjustVitals();
+            Console.WriteLine("\nAdjusted vitals:");
+            foreach (var stat in typeof(Vitals).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public))
+            {
+                Console.WriteLine("{0} = {1}", stat.Name, stat.GetValue(gob.vitals));
+            }
+
+            Console.WriteLine("Enter to continue.");
+            Console.ReadLine();
         }
 
         static void MagicTest()

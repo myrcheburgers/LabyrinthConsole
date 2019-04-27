@@ -157,7 +157,8 @@ namespace Labyrinth_Console
                                         string tarID = cmd[2];
                                         Creature[] mMobs =  new Creature[2];
                                         Creature _caster = mob;
-                                        Creature _target = new Creature("placeholder", "phID", 0, 0, 0, 0, 0, 0, false, mob.magic);
+                                        //Creature _target = new Creature("placeholder", "phID", 0, 0, 0, 0, 0, 0, false, mob.magic);
+                                        Creature _target = new Creature();
 
                                         foreach (Creature target in combatants)
                                         {

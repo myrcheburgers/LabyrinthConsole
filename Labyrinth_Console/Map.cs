@@ -125,7 +125,7 @@ namespace Labyrinth_Console
                     {
                         for (int j = jCenter - r; j <= jCenter + r; j++)
                         {
-                            if (Math.Sqrt(((float)i*(float)i) + ((float)j*(float)j)) <= (float)r)
+                            if (Math.Sqrt(Math.Pow(i - iCenter, 2) + Math.Pow(j - jCenter, 2)) <= r)
                             {
                                 thisMap[i, j] = material;
                             }
@@ -139,6 +139,28 @@ namespace Labyrinth_Console
                 //}
             }
         }
+
+        public void CreateCircleCustom(int iCenter, int jCenter, int r, char customChar)
+        {
+            //bool isValid;
+            char material = ' '; //placeholder
+            material = customChar;
+
+            for (int i = iCenter - r; i <= iCenter + r; i++)
+            {
+                for (int j = jCenter - r; j <= jCenter + r; j++)
+                {
+                    if (Math.Sqrt(Math.Pow(i-iCenter, 2) + Math.Pow(j-jCenter, 2)) <= r)
+                    //if (r <= Math.Sqrt(((float)i * (float)i) + ((float)j * (float)j)))
+                    {
+                        thisMap[i, j] = material;
+                    }
+                }
+            }
+
+            
+        }
+
 
         public void CreateWall(int i, int j)
         {
@@ -206,6 +228,11 @@ namespace Labyrinth_Console
         public void CreateFloor(int i, int j)
         {
             thisMap[i, j] = floor;
+        }
+
+        public void CreateCustom(int i, int j, char customCharacter)
+        {
+            thisMap[i, j] = customCharacter;
         }
 
         void ClearMap()
@@ -531,6 +558,12 @@ namespace Labyrinth_Console
                 }
                 Console.Write(Environment.NewLine);
             }
+        }
+
+        public void CulledDisplay()
+        {
+            // Break lines/add until top blind radius reached, then add blanks until left of blind radius reached, then draw darkness + map in square around player
+
         }
         
         #region misc functions

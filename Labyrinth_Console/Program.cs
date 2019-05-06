@@ -424,7 +424,7 @@ namespace Labyrinth_Console
             //Status.blind = true;
 
             int[] startPos = { 2, 2 };
-            MapController.LoadMap(1, startPos);
+            MapController.LoadMap(-1, startPos);
         }
 
         static void StatTests()

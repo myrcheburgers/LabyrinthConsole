@@ -10,6 +10,7 @@ namespace Labyrinth_Console
     {
         public static readonly Dictionary<int, Map> mapIDList = new Dictionary<int, Map>()
         {
+            {-1, MapList.Debug()},
             {0, MapList.Empty()},
             {1, MapList.Corridor1()},
             {2, MapList.Corridor2()},
@@ -28,6 +29,23 @@ namespace Labyrinth_Console
 
             return map;
         }
+
+        public static Map Debug()
+        {
+            Map map = new Map(25, 25);
+            map.areaName = "Debug Room";
+            map.ID = -1;
+            Status.blind = false;
+            map.CreateBorder();
+
+            map.CreateCircleCustom(10, 10, 5, 'W');
+
+            // to corridor 1 (one-way)
+            map.CreateZonePoint(new PositionKey(1, 1), new DestinationCoordinates(3, 3, 1));
+
+            return map;
+        }
+
         public static Map Corridor1()
         {
             Map map = new Map(25, 25);
@@ -49,7 +67,7 @@ namespace Labyrinth_Console
                 }
             }
 
-            map.CreateZonePoint(new PositionKey(23, 23), new DestinationCoordinates(4, 3, 2)); //Corr2
+            map.CreateZonePoint(new PositionKey(23, 23), new DestinationCoordinates(4, 3, 2)); //Corridor2
             map.CreateZonePoint(new PositionKey(1, 4), new DestinationCoordinates(2, 2, 101)); //Courtyard1
             //map.InitializePlayerPosition(2, 2);
 
@@ -90,7 +108,7 @@ namespace Labyrinth_Console
             map.ID = 101;
             map.defaultBlind = false;
             map.CreateBorder();
-            map.CreateCircle(12, 12, 5, "wall"); //or not...
+            map.CreateCircle(12, 12, 6, "water");
 
             map.CreateZonePoint(new PositionKey(5, 1), new DestinationCoordinates(2, 2, 1));
             map.CreateZonePoint(new PositionKey(15, 22), new DestinationCoordinates(10, 4, 2));
